@@ -1,0 +1,20 @@
+<!-- polls/templates/polls/upload_csv.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CSV 파일 업로드</title>
+</head>
+<body>
+<h1>CSV 파일 업로드</h1>
+{% if error %}
+<p style="color: red;">{{ error }}</p>
+{% endif %}
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">업로드</button>
+</form>
+</body>
+</html>
