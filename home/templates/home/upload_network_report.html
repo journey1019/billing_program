@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload Network Report CSV File</title>
+</head>
+<body>
+<h1>Upload Network Report File</h1>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Upload</button>
+</form>
+<a href="{% url 'home' %}">Back to Home</a>
+</body>
+</html>

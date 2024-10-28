@@ -8,11 +8,15 @@ from django.utils import timezone
 class Question(models.Model):
     question_text = models.CharField(max_length=200)
     pub_date = models.DateTimeField("date published")
+
     def __str__(self):
         return self.question_text
 
     def was_published_recently(self):
         return self.pub_date >= timezone.now() - datetime.timedelta(days=1) # 현재로 부터 하루 차감한 어제의 시간, 어제 이후에 발생된 데이터 리턴
+    was_published_recently.admin_order_field = 'pub_date' # 필드 정렬 기준(발행일)
+    was_published_recently.boolean = True # Icon
+    was_published_recently.short_description = 'Published recently?' # Title 변경 속성
 
 # 1 : n (question= 선택지에 해당하는 질문(외래키), choice_text= 선택지, votes= 투표수)
 class Choice(models.Model):
@@ -21,3 +25,7 @@ class Choice(models.Model):
     votes = models.IntegerField(default=0)
     def __str__(self):
         return self.choice_text
+
+def was_published_recently(self):
+    now = timezone.now()
+    return now - datetime.timedelta(days=1) <= self.pub_date <= now

@@ -19,6 +19,7 @@ from django.urls import include, path
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', include('home.urls')),
     path('polls/', include('polls.urls')), # include: URL 패턴을 포함할 때 항상 사용
     path('insert/', include('insert.urls')), # include: URL 패턴을 포함할 때 항상 사용
 ]

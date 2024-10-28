@@ -1,0 +1,179 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>CDR Records</title>-->
+<!--</head>-->
+<!--<body>-->
+<!--<h1>CDR Records</h1>-->
+<!--<table>-->
+<!--    <tr>-->
+<!--        <th>Record Type</th>-->
+<!--        <th>Record ID</th>-->
+<!--        <th>Date Stamp</th>-->
+<!--        <th>Transaction Type</th>-->
+<!--        <th>Discount Code</th>-->
+<!--        <th>D Product</th>-->
+<!--        <th>Msg ID</th>-->
+<!--        <th>Volume Unit Type</th>-->
+<!--        <th>Volume Units</th>-->
+<!--        <th>Access ID</th>-->
+<!--        <th>Profile ID</th>-->
+<!--        <th>Mobile ID</th>-->
+<!--        <th>Region</th>-->
+<!--        <th>Amount</th>-->
+<!--    </tr>-->
+<!--    {% for cdr in cdrs %}-->
+<!--    <tr>-->
+<!--        <td>{{ cdr.record_type }}</td>-->
+<!--        <td>{{ cdr.record_id }}</td>-->
+<!--        <td>{{ cdr.datestamp }}</td>-->
+<!--        <td>{{ cdr.transaction_type }}</td>-->
+<!--        <td>{{ cdr.discount_code }}</td>-->
+<!--        <td>{{ cdr.d_product }}</td>-->
+<!--        <td>{{ cdr.msg_id }}</td>-->
+<!--        <td>{{ cdr.volume_unit_type }}</td>-->
+<!--        <td>{{ cdr.volume_units }}</td>-->
+<!--        <td>{{ cdr.access_id }}</td>-->
+<!--        <td>{{ cdr.profile_id }}</td>-->
+<!--        <td>{{ cdr.mobile_id }}</td>-->
+<!--        <td>{{ cdr.region }}</td>-->
+<!--        <td>{{ cdr.amount }}</td>-->
+<!--    </tr>-->
+<!--    {% endfor %}-->
+<!--</table>-->
+<!--<a href="{% url 'upload_file' %}">Upload Another CSV File</a>-->
+<!--</body>-->
+<!--</html>-->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Records</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            margin-top: 20px; /* 상단 여백 */
+        }
+        .table-container {
+            height: 50vh; /* Height set to 50% of the viewport */
+            overflow-y: auto; /* Enable vertical scroll */
+            border: 1px solid #ccc; /* Optional: border around the table container */
+            margin-bottom: 20px; /* Optional: spacing between tables */
+            position: relative; /* Positioned to create a stacking context for the header */
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            position: relative; /* Allows for stacking with the header */
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+            position: relative; /* Allow absolute positioning for the header */
+        }
+        th {
+            background-color: #f2f2f2;
+            position: sticky; /* Use sticky positioning for the header */
+            top: 0; /* Stick to the top of the table */
+            z-index: 1; /* Ensure header is above the data */
+        }
+    </style>
+</head>
+<body>
+<h1>CDR Records</h1>
+<div class="table-container">
+    <table>
+        <thead>
+        <tr>
+            <th>Record Type</th>
+            <th>Record ID</th>
+            <th>Date Stamp</th>
+            <th>Transaction Type</th>
+            <th>Discount Code</th>
+            <th>D Product</th>
+            <th>Msg ID</th>
+            <th>Volume Unit Type</th>
+            <th>Volume Units</th>
+            <th>Access ID</th>
+            <th>Profile ID</th>
+            <th>Mobile ID</th>
+            <th>Region</th>
+            <th>Amount</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for cdr in cdrs %}
+        <tr>
+            <td>{{ cdr.record_type }}</td>
+            <td>{{ cdr.record_id }}</td>
+            <td>{{ cdr.datestamp }}</td>
+            <td>{{ cdr.transaction_type }}</td>
+            <td>{{ cdr.discount_code }}</td>
+            <td>{{ cdr.d_product }}</td>
+            <td>{{ cdr.msg_id }}</td>
+            <td>{{ cdr.volume_unit_type }}</td>
+            <td>{{ cdr.volume_units }}</td>
+            <td>{{ cdr.access_id }}</td>
+            <td>{{ cdr.profile_id }}</td>
+            <td>{{ cdr.mobile_id }}</td>
+            <td>{{ cdr.region }}</td>
+            <td>{{ cdr.amount }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+<a href="{% url 'upload_file' %}">Upload CDR CSV File</a><br>
+
+<h1>Network Report Records</h1>
+<div class="table-container">
+    <table>
+        <thead>
+        <tr>
+            <th>SP ID</th>
+            <th>Serial Number</th>
+            <th>Terminal ID</th>
+            <th>Activated</th>
+            <th>SID</th>
+            <th>PSN</th>
+            <th>Mode</th>
+            <th>Feature Options</th>
+            <th>Profile ID</th>
+            <th>Profile Name</th>
+            <th>Profiles</th>
+            <th>IP Service Address</th>
+            <th>Field Type</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for network_report in network_reports %}
+        <tr>
+            <td>{{ network_report.sp_id }}</td>
+            <td>{{ network_report.serial_number }}</td>
+            <td>{{ network_report.terminal_id }}</td>
+            <td>{{ network_report.activated }}</td>
+            <td>{{ network_report.sid }}</td>
+            <td>{{ network_report.psn }}</td>
+            <td>{{ network_report.mode }}</td>
+            <td>{{ network_report.feature_options }}</td>
+            <td>{{ network_report.profile_id }}</td>
+            <td>{{ network_report.profile_name }}</td>
+            <td>{{ network_report.profiles }}</td>
+            <td>{{ network_report.ip_service_address }}</td>
+            <td>{{ network_report.field_type }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+<a href="{% url 'upload_network_report' %}">Upload Network Report CSV File</a>
+</body>
+</html>
