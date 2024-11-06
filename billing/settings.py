@@ -121,11 +121,11 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Seoul' # UTC / KST(한국 표준시)
 
 USE_I18N = True
 
-USE_TZ = True
+USE_TZ = True # 타임존을 사용하도록 설정
 
 
 # Static files (CSS, JavaScript, Images)

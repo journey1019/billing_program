@@ -16,4 +16,25 @@
     {% endfor %}
 </ul>
 {% endif %}
+<h3>업로드된 파일 목록</h3>
+<table>
+    <thead>
+    <tr>
+        <th>파일 이름</th>
+        <th>업로드 날짜</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for file in uploaded_files %}
+    <tr>
+        <td>{{ file.file_name }}</td>
+        <td>{{ file.upload_date }}</td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="2">업로드된 파일이 없습니다.</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
 {% endblock %}
