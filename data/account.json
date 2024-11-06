@@ -1,0 +1,236 @@
+[
+  {
+    "acct_num": "V_10101",
+    "acct_name": "씨벤티지(주)",
+    "acct_residentnum": 6928101016,
+    "classification": "씨벤티지",
+    "invoice_address": "서울시 강남구 강남대로 500, 6층 (논현동, 논현빌딩)",
+    "invoice_address_2": "",
+    "invoice_postcode": 6119
+  },
+  {
+    "acct_num": "S_10103",
+    "acct_name": "평창군청",
+    "acct_residentnum": 2258300903,
+    "classification": "평창군청",
+    "invoice_address": "강원도 평창군 평창읍 군청길 77",
+    "invoice_address_2": "안전교통과 재해예방팀",
+    "invoice_postcode": 25374
+  },
+  {
+    "acct_num": "S_10104",
+    "acct_name": "낙동강홍수통제소",
+    "acct_residentnum": 6038302358,
+    "classification": "홍수통제소",
+    "invoice_address": "부산광역시 사하구 낙동남로 1233번길 88 (하단동)",
+    "invoice_address_2": "담당부서 전기통신과",
+    "invoice_postcode": 49300
+  },
+  {
+    "acct_num": "S_10105",
+    "acct_name": "영산강홍수통제소",
+    "acct_residentnum": 4128303620,
+    "classification": "홍수통제소",
+    "invoice_address": "광주광역시 서구 죽봉대로22번길 25 (농성동)",
+    "invoice_address_2": "",
+    "invoice_postcode": 61934
+  },
+  {
+    "acct_num": "S_10105_1",
+    "acct_name": "영산강홍수통제소",
+    "acct_residentnum": 4128303620,
+    "classification": "홍수통제소",
+    "invoice_address": "광주광역시 서구 죽봉대로22번길 25 (농성동)",
+    "invoice_address_2": "",
+    "invoice_postcode": 61934
+  },
+  {
+    "acct_num": "S_10109",
+    "acct_name": "금강홍수통제소",
+    "acct_residentnum": 3078303876,
+    "classification": "홍수통제소",
+    "invoice_address": "충남 공주시 금벽로 551 (신관동)",
+    "invoice_address_2": "",
+    "invoice_postcode": 32595
+  },
+  {
+    "acct_num": "S_10111",
+    "acct_name": "㈜태화산업",
+    "acct_residentnum": 1218162355,
+    "classification": "모래채취_펌프",
+    "invoice_address": "경기도 김포시 대곶면 약암로 583",
+    "invoice_address_2": "",
+    "invoice_postcode": 10050
+  },
+  {
+    "acct_num": "S_10112",
+    "acct_name": "대양해운㈜",
+    "acct_residentnum": 6168100013,
+    "classification": "모래채취_펌프",
+    "invoice_address": "제주도 제주시 동문로 125(건입동)",
+    "invoice_address_2": "",
+    "invoice_postcode": 63283
+  },
+  {
+    "acct_num": "S_10113",
+    "acct_name": "㈜한라해운",
+    "acct_residentnum": 6168149603,
+    "classification": "모래채취_펌프",
+    "invoice_address": "제주도 제주시 동문로 125(건입동)",
+    "invoice_address_2": "",
+    "invoice_postcode": 63283
+  },
+  {
+    "acct_num": "S_10114",
+    "acct_name": "일광산업㈜",
+    "acct_residentnum": 6168138464,
+    "classification": "모래채취_펌프",
+    "invoice_address": "부산시 사하구 감천항로 147, 2층",
+    "invoice_address_2": "",
+    "invoice_postcode": 49455
+  },
+  {
+    "acct_num": "S_10116",
+    "acct_name": "㈜대흥개발",
+    "acct_residentnum": 3168121684,
+    "classification": "모래채취_펌프",
+    "invoice_address": "충남 서산시 팔봉면 팔봉1로 753",
+    "invoice_address_2": "",
+    "invoice_postcode": 31921
+  },
+  {
+    "acct_num": "S_10119",
+    "acct_name": "㈜삼일산업",
+    "acct_residentnum": 6038158391,
+    "classification": "모래채취_펌프",
+    "invoice_address": "경남 창원시 진해구 행암로92번안길 30(장천동)",
+    "invoice_address_2": "",
+    "invoice_postcode": 51627
+  },
+  {
+    "acct_num": "S_10124",
+    "acct_name": "경우해운㈜",
+    "acct_residentnum": 1218102380,
+    "classification": "모래채취_펌프",
+    "invoice_address": "인천광역시 중구 축항대로166번길 18(항동7가)",
+    "invoice_address_2": "",
+    "invoice_postcode": 22337
+  },
+  {
+    "acct_num": "S_10127",
+    "acct_name": "한강홍수통제소",
+    "acct_residentnum": 1148300199,
+    "classification": "홍수통제소",
+    "invoice_address": "서울시 서초구 동작대로 328",
+    "invoice_address_2": "",
+    "invoice_postcode": 6501
+  },
+  {
+    "acct_num": "S_10128",
+    "acct_name": "속초시청",
+    "acct_residentnum": 2278300267,
+    "classification": "속초시청",
+    "invoice_address": "강원도 속초시 중앙로 183 (중앙동)",
+    "invoice_address_2": "재난안전과 김은정 주무관님",
+    "invoice_postcode": 24826
+  },
+  {
+    "acct_num": "S_10130",
+    "acct_name": "㈜금호해운",
+    "acct_residentnum": 6168173684,
+    "classification": "모래채취선",
+    "invoice_address": "전남 해남군 산이면 관광레저로 2003",
+    "invoice_address_2": "",
+    "invoice_postcode": 59014
+  },
+  {
+    "acct_num": "S_10131",
+    "acct_name": "한국기상산업기술원",
+    "acct_residentnum": 1018213288,
+    "classification": "한국기상산업기술원",
+    "invoice_address": "서울시 서대문구 통일로 135, 13-15층 (충정로2가, 충정빌딩)",
+    "invoice_address_2": "",
+    "invoice_postcode": 3735
+  },
+  {
+    "acct_num": "S_10132",
+    "acct_name": "㈜유일이엔지",
+    "acct_residentnum": 8248700256,
+    "classification": "GS CALTEX",
+    "invoice_address": "부산시 강서구 유통단지1로 41, 122동 111호 (대저2동, 부산 T-PLEX)",
+    "invoice_address_2": "",
+    "invoice_postcode": 47621
+  },
+  {
+    "acct_num": "S_10133",
+    "acct_name": "한신해운",
+    "acct_residentnum": 4093600583,
+    "classification": "GS CALTEX",
+    "invoice_address": "전라남도 여수시 문수로 117, 3층 (문수동, KT문수빌딩)",
+    "invoice_address_2": "",
+    "invoice_postcode": 59700
+  },
+  {
+    "acct_num": "S_10134",
+    "acct_name": "㈜옥주급유",
+    "acct_residentnum": 4178117727,
+    "classification": "GS CALTEX",
+    "invoice_address": "전라남도 여수시 하멜로 51-11 (종화동)",
+    "invoice_address_2": "",
+    "invoice_postcode": 59746
+  },
+  {
+    "acct_num": "S_10135",
+    "acct_name": "봉은해운㈜",
+    "acct_residentnum": 6028166957,
+    "classification": "GS CALTEX",
+    "invoice_address": "부산시 중구 광복로97번길 18, 201호 (동광동2가, 동양빌딩)",
+    "invoice_address_2": "",
+    "invoice_postcode": 48955
+  },
+  {
+    "acct_num": "S_10136",
+    "acct_name": "유진기업㈜",
+    "acct_residentnum": 1218524868,
+    "classification": "모래채취선",
+    "invoice_address": "인천광역시 중구 서해대로 7 (항동7가)",
+    "invoice_address_2": "",
+    "invoice_postcode": 22342
+  },
+  {
+    "acct_num": "S_10129",
+    "acct_name": "㈜오트로닉스",
+    "acct_residentnum": 1068183313,
+    "classification": "오트로닉스",
+    "invoice_address": "서울시 용산구 원효로 210-30 103호 (신계동)",
+    "invoice_address_2": "",
+    "invoice_postcode": 4368
+  },
+  {
+    "acct_num": "S_10104_1",
+    "acct_name": "제아정보통신",
+    "acct_residentnum": 1308167524,
+    "classification": "제아",
+    "invoice_address": "경기도 부천시 경인로 440(괴안동)",
+    "invoice_address_2": "",
+    "invoice_postcode": 14961
+  },
+  {
+    "acct_num": "KO_99999",
+    "acct_name": "코리아오브컴",
+    "acct_residentnum": null,
+    "classification": "내부개발용",
+    "invoice_address": "",
+    "invoice_address_2": "",
+    "invoice_postcode": null
+  },
+  {
+    "acct_num": "KO_90001",
+    "acct_name": "코리아오브컴",
+    "acct_residentnum": null,
+    "classification": "이전기록체크용",
+    "invoice_address": "",
+    "invoice_address_2": "",
+    "invoice_postcode": null
+  }
+]

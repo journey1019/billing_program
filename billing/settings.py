@@ -30,9 +30,12 @@ ALLOWED_HOSTS = []
 
 # Application definition
 INSTALLED_APPS = [
-    'home',
-    'insert.apps.InsertConfig',
+    'rest_framework', # Django REST framework
+
+    'table.apps.TableConfig',
     'polls.apps.PollsConfig',
+    'uploads.apps.UploadsConfig',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -40,6 +43,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
+
+MIGRATION_MODULES = {
+    # 'table.apps.TableConfig': None, # 기존 home 앱의 마이그레이션 중단
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -57,6 +64,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        # 'DIRS': [BASE_DIR / "billing" / "templates"],  # 경로 추가
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -78,11 +86,11 @@ WSGI_APPLICATION = 'billing.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'polls_db',
+        'NAME': 'billing_db', # billing_db / polls_db
         'USER': 'jihyeon',
         'PASSWORD': '9312',
         'HOST': 'localhost',
-        'PORT': '',
+        'PORT': '5432',
         # 'ENGINE': 'django.db.backends.sqlite3',
         # 'NAME': BASE_DIR / 'db.sqlite3',
     }
@@ -123,8 +131,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
-
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 

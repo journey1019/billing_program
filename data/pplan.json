@@ -1,0 +1,123 @@
+[
+  {
+    "ppid": 110,
+    "basic_fee": 20900,
+    "subscription_fee": 30000,
+    "free_byte": 0,
+    "surcharge_unit": 1,
+    "each_surcharge_fee": 0,
+    "apply_company": "평창군청",
+    "remarks": "최초 가입 외 변화 없음",
+    "note": "(2024년 5월 10% 인상 적용 후)"
+  },
+  {
+    "ppid": 120,
+    "basic_fee": 26000,
+    "subscription_fee": 30000,
+    "free_byte": 0,
+    "surcharge_unit": 1,
+    "each_surcharge_fee": 0,
+    "apply_company": "속초시청",
+    "remarks": "최초 가입 외 변화 없음",
+    "note": "(2024년 5월 10% 인상 적용 후)"
+  },
+  {
+    "ppid": 210,
+    "basic_fee": 20900,
+    "subscription_fee": 30000,
+    "free_byte": 0,
+    "surcharge_unit": 1,
+    "each_surcharge_fee": 0,
+    "apply_company": "홍수통제소(제아)",
+    "remarks": "제아설치, 낙동강, 영산강",
+    "note": "(2024년 5월 10% 인상 적용 후)"
+  },
+  {
+    "ppid": 220,
+    "basic_fee": 20900,
+    "subscription_fee": 40000,
+    "free_byte": 0,
+    "surcharge_unit": 1,
+    "each_surcharge_fee": 0,
+    "apply_company": "홍수통제소(화진)",
+    "remarks": "화진설치, 금강, 한강",
+    "note": "(2024년 5월 10% 인상 적용 후)"
+  },
+  {
+    "ppid": 310,
+    "basic_fee": 95000,
+    "subscription_fee": 40000,
+    "free_byte": 100000,
+    "surcharge_unit": 1,
+    "each_surcharge_fee": 1.1,
+    "apply_company": "기상산업진흥원(100K)",
+    "remarks": "기상산업진흥원, 오토로닉스",
+    "note": "(2024년 5월 10% 인상 적용 후)"
+  },
+  {
+    "ppid": 320,
+    "basic_fee": 638000,
+    "subscription_fee": 40000,
+    "free_byte": 6000000,
+    "surcharge_unit": 1000,
+    "each_surcharge_fee": 88,
+    "apply_company": "기상산업진흥원(6M)",
+    "remarks": "기상산업진흥원, 오토로닉스",
+    "note": "(2024년 5월 10% 인상 적용 후)"
+  },
+  {
+    "ppid": 410,
+    "basic_fee": 80000,
+    "subscription_fee": 40000,
+    "free_byte": 50000,
+    "surcharge_unit": 1,
+    "each_surcharge_fee": 0,
+    "apply_company": "펌프모니터링",
+    "remarks": "태화산업 대양해운 등",
+    "note": "(2024년 5월 10% 인상 적용 후)"
+  },
+  {
+    "ppid": 420,
+    "basic_fee": 80000,
+    "subscription_fee": 40000,
+    "free_byte": 25000,
+    "surcharge_unit": 1,
+    "each_surcharge_fee": 3,
+    "apply_company": "모래채취선",
+    "remarks": "ORB 모래채취선과 유사요금 적용",
+    "note": "(2024년 5월 10% 인상 적용 후)"
+  },
+  {
+    "ppid": 430,
+    "basic_fee": 90000,
+    "subscription_fee": 40000,
+    "free_byte": 25000,
+    "surcharge_unit": 1,
+    "each_surcharge_fee": 3,
+    "apply_company": "GS-Caltex",
+    "remarks": "옥주급유 봉은해운 등",
+    "note": "(2024년 5월 10% 인상 적용 후)"
+  },
+  {
+    "ppid": 999,
+    "basic_fee": 0,
+    "subscription_fee": 0,
+    "free_byte": 100000,
+    "surcharge_unit": 1,
+    "each_surcharge_fee": 0,
+    "apply_company": "KO 내부사용용도",
+    "remarks": "",
+    "note": ""
+  },
+  {
+    "ppid": 901,
+    "basic_fee": 0,
+    "subscription_fee": 0,
+    "free_byte": 100000,
+    "surcharge_unit": 1,
+    "each_surcharge_fee": 0,
+    "apply_company": "이전 기록 체크용",
+    "remarks": "",
+    "note": ""
+  }
+]

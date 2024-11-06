@@ -1,0 +1,20 @@
+{% extends "base_generic.html" %}
+
+{% block title %}CSV Upload{% endblock %}
+
+{% block content %}
+<h2>CSV 파일 업로드</h2>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">업로드</button>
+</form>
+{% if messages %}
+<ul>
+    {% for message in messages %}
+    <li>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endblock %}
+
