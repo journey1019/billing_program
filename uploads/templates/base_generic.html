@@ -1,4 +1,4 @@
-{% load static %}
+{% load static %} <!-- Django 정적파일(CSS, JS)을 로드할 수 있도록 함 -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}My Billing App{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <!-- DataTables CSS (head 태그에 추가) -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css">
+
 </head>
 <body>
 <header>

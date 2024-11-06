@@ -1,10 +1,10 @@
 from django.db import models
-from django.utils import timezone
+from datetime import datetime
 
 class CDR(models.Model):
     record_type = models.CharField(max_length=3)
     record_id = models.IntegerField()
-    datestamp = models.DateTimeField()
+    datestamp = models.CharField(max_length=100)
     transaction_type = models.CharField(max_length=3)
     discount_code = models.CharField(max_length=5)
     d_product = models.CharField(max_length=10)
@@ -18,15 +18,25 @@ class CDR(models.Model):
     amount = models.IntegerField()
 
     # Auto-generated fields based on `datestamp`
-    date = models.DateField(editable=False)
-    date_index = models.CharField(max_length=6, editable=False)
+    date = models.CharField(max_length=100)
+    date_index = models.CharField(max_length=100)
 
     class Meta:
         # Unique constraint to avoid duplicates
         unique_together = ("serial_number", "datestamp", "d_product", "msg_id")
 
     def save(self, *args, **kwargs):
-        # Automatically set `date` and `date_index` based on `datestamp`
-        self.date = self.datestamp.date()
-        self.date_index = self.datestamp.strftime("%Y%m")
+        # Convert datestamp to datetime object
+        if self.datestamp:
+            try:
+                # Assuming datestamp format is "YYYY-MM-DD HH:MM:SS"
+                datestamp_obj = datetime.strptime(self.datestamp, "%Y-%m-%d %H:%M:%S")
+
+                # Automatically set `date` and `date_index` based on `datestamp`
+                self.date = datestamp_obj.date().strftime("%Y-%m-%d")  # "YYYY-MM-DD"
+                self.date_index = datestamp_obj.strftime("%Y%m")  # "YYYYMM"
+            except ValueError:
+                # Handle the error if the date format is incorrect
+                pass
+
         super().save(*args, **kwargs)

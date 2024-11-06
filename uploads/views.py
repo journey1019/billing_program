@@ -1,54 +1,69 @@
 import csv
 from django.shortcuts import render, redirect
+from .models import CDR  # CDR 모델 임포트
 from django.contrib import messages
-from .models import CDR
-from .forms import CSVUploadForm
-from django.db.utils import IntegrityError
+from datetime import datetime
+from django.db import IntegrityError
 
 def upload_csv(request):
     if request.method == "POST":
-        form = CSVUploadForm(request.POST, request.FILES)
-        if form.is_valid():
-            csv_file = request.FILES["file"]
-            if not csv_file.name.endswith(".csv"):
-                messages.error(request, "CSV 파일만 업로드할 수 있습니다.")
-                return redirect("upload_csv")
+        csv_files = request.FILES.getlist("csv_file")  # 여러 파일을 가져옴
+        for csv_file in csv_files:
+            # CSV 파일을 텍스트로 읽고, 컬럼명을 소문자로 변환
+            file_data = csv_file.read().decode("utf-8").splitlines()
+            csv_reader = csv.DictReader(file_data)
+            transformed_data = [
+                {k.lower(): v for k, v in row.items()} for row in csv_reader  # 컬럼명을 소문자로 변환
+            ]
 
-            decoded_file = csv_file.read().decode("utf-8").splitlines()
-            reader = csv.DictReader(decoded_file)
+            # mobile_id를 serial_number로 변환하고, date와 date_index 필드도 생성
+            for row in transformed_data:
+                row["serial_number"] = row.pop("mobile_id", None)  # mobile_id -> serial_number
 
-            cdr_entries = []
-            for row in reader:
-                try:
-                    cdr_entry = CDR(
-                        record_type=row["record_type"],
-                        record_id=row["record_id"],
-                        datestamp=row["datestamp"],
-                        transaction_type=row["transaction_type"],
-                        discount_code=row["discount_code"],
-                        d_product=row["d_product"],
-                        msg_id=row["msg_id"],
-                        volume_unit_type=row["volume_unit_type"],
-                        volume_units=row["volume_units"],
-                        access_id=row.get("access_id", None),
-                        profile_id=row["profile_id"],
-                        serial_number=row["serial_number"],
-                        region=row.get("region", None),
-                        amount=row["amount"],
-                    )
-                    cdr_entries.append(cdr_entry)
-                except KeyError as e:
-                    messages.error(request, f"잘못된 컬럼명: {e}")
-                    return redirect("upload_csv")
+                # datestamp를 그대로 문자열로 사용 (형식: "2024-08-01 00:00:00")
+                datestamp = row["datestamp"]
+                date = datestamp.split()[0]  # "YYYY-MM-DD"
+                date_index = datestamp.replace("-", "")[:6]  # "YYYYMM"
 
-            try:
-                CDR.objects.bulk_create(cdr_entries, ignore_conflicts=True) # 중복 항목을 무시하고 새 레코드만 삽입
-                messages.success(request, "CSV 데이터를 성공적으로 업로드하였습니다.")
-            except IntegrityError:
-                messages.error(request, "중복 데이터가 포함되어 일부 항목이 생략되었습니다.")
+                # 중복 여부 체크 (unique_together 필드를 기준으로)
+                existing_cdr = CDR.objects.filter(
+                    serial_number=row["serial_number"],
+                    datestamp=datestamp,
+                    d_product=row["d_product"],
+                    msg_id=row["msg_id"]
+                ).first()
 
-            return redirect("upload_csv")
-    else:
-        form = CSVUploadForm()
+                if existing_cdr:
+                    # 중복된 값이 있으면 터미널에 출력
+                    print(f"중복된 값 발견: serial_number={row['serial_number']}, msg_id={row['msg_id']}, datestamp={datestamp}, d_product={row['d_product']}")
+                else:
+                    # 중복된 값이 없다면 데이터를 저장
+                    try:
+                        CDR.objects.update_or_create(
+                            serial_number=row["serial_number"],
+                            msg_id=row["msg_id"],
+                            d_product=row["d_product"],
+                            datestamp=datestamp,  # 문자열 그대로 저장
+                            defaults={
+                                "record_type": row.get("record_type"),
+                                "record_id": row.get("record_id"),
+                                "transaction_type": row.get("transaction_type"),
+                                "discount_code": row.get("discount_code"),
+                                "volume_unit_type": row.get("volume_unit_type"),
+                                "volume_units": row.get("volume_units"),
+                                "access_id": row.get("access_id"),
+                                "profile_id": row.get("profile_id"),
+                                "region": row.get("region"),
+                                "amount": row.get("amount"),
+                                "date": date,  # YYYY-MM-DD 형식으로 저장
+                                "date_index": date_index  # YYYYMM 형식으로 저장
+                            }
+                        )
+                    except IntegrityError:
+                        # 중복된 값 발견 시 예외 처리
+                        print(f"중복된 값 발견 (예외 처리): serial_number={row['serial_number']}, msg_id={row['msg_id']}, datestamp={datestamp}, d_product={row['d_product']}")
 
-    return render(request, "uploads/upload_csv.html", {"form": form})
+            messages.success(request, f"파일 '{csv_file.name}' 이 성공적으로 업로드되었습니다.")
+        return redirect("uploads:upload_csv")
+
+    return render(request, "uploads/upload_csv.html")

@@ -1,12 +1,12 @@
 {% extends "base_generic.html" %}
 
-{% block title %}CSV Upload{% endblock %}
+{% block title %}CSV 파일 업로드{% endblock %}
 
 {% block content %}
 <h2>CSV 파일 업로드</h2>
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
-    {{ form.as_p }}
+    <input type="file" name="csv_file" multiple required>  <!-- multiple 속성 추가 -->
     <button type="submit">업로드</button>
 </form>
 {% if messages %}
@@ -17,4 +17,3 @@
 </ul>
 {% endif %}
 {% endblock %}
-
