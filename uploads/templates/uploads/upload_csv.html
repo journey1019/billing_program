@@ -3,38 +3,152 @@
 {% block title %}CSV 파일 업로드{% endblock %}
 
 {% block content %}
-<h2>CSV 파일 업로드</h2>
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    <input type="file" name="csv_file" multiple required>  <!-- multiple 속성 추가 -->
-    <button type="submit">업로드</button>
-</form>
-{% if messages %}
-<ul>
-    {% for message in messages %}
-    <li>{{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
-<h3>업로드된 파일 목록</h3>
-<table>
-    <thead>
-    <tr>
-        <th>파일 이름</th>
-        <th>업로드 날짜</th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for file in uploaded_files %}
-    <tr>
-        <td>{{ file.file_name }}</td>
-        <td>{{ file.upload_date }}</td>
-    </tr>
-    {% empty %}
-    <tr>
-        <td colspan="2">업로드된 파일이 없습니다.</td>
-    </tr>
-    {% endfor %}
-    </tbody>
-</table>
+<div style="display: flex; width: 100%;">
+    <div style="width: 60%">
+        <h2>CSV 파일 업로드</h2>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="file" name="csv_file" multiple required>
+            <button type="submit">업로드</button>
+        </form>
+
+        {% if messages %}
+        <ul>
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
+    <div style="width: 40%">
+        <!-- 누적된 CDR 데이터 링크 이동 -->
+        <h3>누적된 CDR 테이블 보기</h3>
+        <a href="{% url 'uploads:cdr_table' %}">CDR 테이블 보기</a>
+    </div>
+</div>
+
+<style>
+    /* Flex 레이아웃 및 스크롤 설정 */
+    .table-container {
+        display: flex;
+        width: 100%;
+        flex-wrap: wrap; /* 작은 해상도에서 테이블이 겹치지 않도록 줄바꿈 */
+    }
+
+    /* 큰 화면에서는 두 테이블을 가로로 나란히 표시 */
+    .cdr-table-wrapper {
+        width: 70%;
+        overflow-x: auto; /* 테이블이 영역을 넘으면 스크롤이 생김 */
+    }
+
+    .file-list-wrapper {
+        width: 30%;
+        overflow-x: auto;
+    }
+
+    /* 작은 화면에서는 세로로 배치 */
+    @media (max-width: 768px) {
+        .cdr-table-wrapper,
+        .file-list-wrapper {
+            width: 100% !important; /* 우선순위 증가 */
+        }
+    }
+</style>
+<div class="table-container">
+    <!-- 누적된 CDR 데이터 테이블 -->
+    <div class="cdr-table-wrapper">
+        <h3>누적된 CDR 데이터</h3>
+        <table id="cdr-table" class="display" style="width: 100%;">
+            <thead>
+            <tr>
+                <th>Record Type</th>
+                <th>Record ID</th>
+                <th>Date Stamp</th>
+                <th>Transaction Type</th>
+                <th>Discount Code</th>
+                <th>D Product</th>
+                <th>Message ID</th>
+                <th>Volume Units</th>
+                <th>Serial Number</th>
+                <th>Region</th>
+                <th>Amount</th>
+                <th>Date</th>
+                <th>Date Index</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for cdr in cdr_data %}
+            <tr>
+                <td>{{ cdr.record_type }}</td>
+                <td>{{ cdr.record_id }}</td>
+                <td>{{ cdr.datestamp }}</td>
+                <td>{{ cdr.transaction_type }}</td>
+                <td>{{ cdr.discount_code }}</td>
+                <td>{{ cdr.d_product }}</td>
+                <td>{{ cdr.msg_id }}</td>
+                <td>{{ cdr.volume_units }}</td>
+                <td>{{ cdr.serial_number }}</td>
+                <td>{{ cdr.region }}</td>
+                <td>{{ cdr.amount }}</td>
+                <td>{{ cdr.date }}</td>
+                <td>{{ cdr.date_index }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 업로드된 파일 목록 -->
+    <div class="file-list-wrapper">
+        <h3>업로드된 파일 목록</h3>
+        <table style="width: 100%;">
+            <thead>
+            <tr>
+                <th>파일 이름</th>
+                <th>업로드 날짜</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for file in uploaded_files %}
+            <tr>
+                <td>{{ file.file_name }}</td>
+                <td>{{ file.upload_date }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="2">업로드된 파일이 없습니다.</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    $(document).ready(function() {
+        // DataTables 초기화
+        $('#cdr-table').DataTable({
+            "paging": true,           // 페이지네이션 활성화
+            "pageLength": 10,         // 한 페이지에 표시할 행 수
+            "lengthChange": true,     // 표시할 행 수 조정 옵션
+            "ordering": true,         // 컬럼 정렬 가능
+            "searching": true,        // 검색 창 표시
+            "info": true,             // 정보 표시
+            "autoWidth": false,       // 자동 너비 설정 끄기
+            "language": {
+                "paginate": {
+                    "first": "처음",
+                    "last": "마지막",
+                    "next": "다음",
+                    "previous": "이전"
+                },
+                "search": "검색:",
+                "lengthMenu": "페이지당 _MENU_ 개씩 보기",
+                "info": "총 _TOTAL_ 개 항목 중 _START_ 부터 _END_ 까지 표시"
+            }
+        });
+    });
+</script>
 {% endblock %}

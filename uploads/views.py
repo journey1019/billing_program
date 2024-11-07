@@ -1,5 +1,6 @@
 # uploads/views.py
 import csv
+from django.core.paginator import Paginator
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from .models import CDR, UploadedFile
@@ -78,4 +79,14 @@ def upload_csv(request):
 
     # 업로드된 파일 목록 조회
     uploaded_files = UploadedFile.objects.all()
-    return render(request, "uploads/upload_csv.html", {"uploaded_files": uploaded_files})
+    cdr_data = CDR.objects.all()
+    return render(request, "uploads/upload_csv.html", {"uploaded_files": uploaded_files, "cdr_data": cdr_data})
+
+
+def cdr_table(request):
+    cdr_data = CDR.objects.all()
+    paginator = Paginator(cdr_data, 50)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, "uploads/cdr_table.html", {"page_obj": page_obj})
