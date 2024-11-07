@@ -34,7 +34,7 @@ INSTALLED_APPS = [
 
     'table.apps.TableConfig',
     'polls.apps.PollsConfig',
-    'uploads.apps.UploadsConfig',
+    'cdr.apps.CdrConfig',
 
     'django.contrib.admin',
     'django.contrib.auth',

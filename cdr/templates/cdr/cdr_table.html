@@ -1,0 +1,83 @@
+{% extends "base_generic.html" %}
+
+{% block title %}CDR Data Table{% endblock %}
+
+{% block content %}
+<div style="display:block; width: 100%; overflow-x: auto;">
+    <h2>CDR Data Table</h2>
+    <table id="cdr-table" class="display" style="width: 100%;">
+        <thead>
+        <tr>
+            <th>Record Type</th>
+            <th>Record ID</th>
+            <th>Datestamp</th>
+            <th>Transaction Type</th>
+            <th>Discount Code</th>
+            <th>D Product</th>
+            <th>Msg ID</th>
+            <th>Volume Unit Type</th>
+            <th>Volume Units</th>
+            <th>Access ID</th>
+            <th>Profile ID</th>
+            <th>Serial Number</th>
+            <th>Region</th>
+            <th>Amount</th>
+            <th>Date</th>
+            <th>Date Index</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for cdr in page_obj %}
+        <tr>
+            <td>{{ cdr.record_type }}</td>
+            <td>{{ cdr.record_id }}</td>
+            <td>{{ cdr.datestamp }}</td>
+            <td>{{ cdr.transaction_type }}</td>
+            <td>{{ cdr.discount_code }}</td>
+            <td>{{ cdr.d_product }}</td>
+            <td>{{ cdr.msg_id }}</td>
+            <td>{{ cdr.volume_unit_type }}</td>
+            <td>{{ cdr.volume_units }}</td>
+            <td>{{ cdr.access_id }}</td>
+            <td>{{ cdr.profile_id }}</td>
+            <td>{{ cdr.serial_number }}</td>
+            <td>{{ cdr.region }}</td>
+            <td>{{ cdr.amount }}</td>
+            <td>{{ cdr.date }}</td>
+            <td>{{ cdr.date_index }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
+
+<!-- DataTables 초기화 스크립트 -->
+{% block extra_js %}
+<script>
+    $(document).ready(function() {
+        // DataTables 초기화
+        $('#cdr-table').DataTable({
+            "paging": true,           // 페이지네이션 활성화
+            "pageLength": 10,         // 한 페이지에 표시할 행 수
+            "lengthChange": true,     // 표시할 행 수 조정 옵션
+            "ordering": true,         // 컬럼 정렬 가능
+            "searching": true,        // 검색 창 표시
+            "info": true,             // 정보 표시
+            "autoWidth": false,       // 자동 너비 설정 끄기
+            "language": {
+                "paginate": {
+                    "first": "처음",
+                    "last": "마지막",
+                    "next": "다음",
+                    "previous": "이전"
+                },
+                "search": "검색:",
+                "lengthMenu": "페이지당 _MENU_ 개씩 보기",
+                "info": "총 _TOTAL_ 개 항목 중 _START_ 부터 _END_ 까지 표시"
+            }
+        });
+    });
+</script>
+{% endblock %}
