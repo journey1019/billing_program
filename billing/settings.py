@@ -79,6 +79,14 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'billing.wsgi.application'
 
+# 페이지네이션 설정이나 다른 DRF 관련 설정을 추가 가능
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10,  # 페이지당 항목 수
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',  # 인증된 사용자만 작성할 수 있도록 설정
+    ],
+}
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases

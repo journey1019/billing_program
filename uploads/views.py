@@ -6,7 +6,12 @@ from django.contrib import messages
 from .models import CDR, UploadedFile
 from datetime import datetime
 from django.db import IntegrityError
+from rest_framework import viewsets
+from rest_framework import filters
+from rest_framework.pagination import PageNumberPagination
+from .serializers import CDRSerializer
 
+# CDR.csv Upload
 def upload_csv(request):
     if request.method == "POST":
         csv_files = request.FILES.getlist("csv_file")  # 여러 파일을 가져옴
@@ -82,7 +87,7 @@ def upload_csv(request):
     cdr_data = CDR.objects.all()
     return render(request, "uploads/upload_csv.html", {"uploaded_files": uploaded_files, "cdr_data": cdr_data})
 
-
+# CDR Table
 def cdr_table(request):
     cdr_data = CDR.objects.all()
     paginator = Paginator(cdr_data, 50)
@@ -90,3 +95,15 @@ def cdr_table(request):
     page_obj = paginator.get_page(page_number)
 
     return render(request, "uploads/cdr_table.html", {"page_obj": page_obj})
+
+# CDR API
+class CDRViewSet(viewsets.ModelViewSet): # ModelViewSet은
+    queryset = CDR.objects.all()  # 모든 CDR 객체를 반환
+    serializer_class = CDRSerializer  # 직렬화 클래스 설정
+    filter_backends = [filters.OrderingFilter, filters.SearchFilter]
+    search_fields = ['record_type', 'region']  # 검색할 필드
+    ordering_fields = ['datestamp']  # 정렬할 필드
+    ordering = ['-datestamp']  # 기본 정렬 기준
+
+    # 페이지네이션 설정
+    pagination_class = PageNumberPagination
