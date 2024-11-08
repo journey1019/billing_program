@@ -1,4 +1,3 @@
-# uploads/views.py
 import csv
 from django.core.paginator import Paginator
 from django.shortcuts import render, redirect

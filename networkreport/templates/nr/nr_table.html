@@ -1,0 +1,75 @@
+{% extends "base_generic.html" %}
+
+{% block title %}NetworkReport Data Table{% endblock %}
+
+{% block content %}
+<div style="display:block; width: 100%; overflow-x: auto;">
+    <h2>NetworkReport Data Table</h2>
+    <table id="nr-table" class="display" style="width: 100%;">
+        <thead>
+        <tr>
+            <th>SP ID</th>
+            <th>Serial Number</th>
+            <th>Terminal ID</th>
+            <th>Activated</th>
+            <th>SID</th>
+            <th>PSN</th>
+            <th>Mode</th>
+            <th>Feature Options</th>
+            <th>Profile ID</th>
+            <th>Profile Name</th>
+            <th>Profiles</th>
+            <th>IP Service Address</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for nr in page_obj %}
+        <tr>
+            <td>{{ nr.sp_id }}</td>
+            <td>{{ nr.serial_number }}</td>
+            <td>{{ nr.terminal_id }}</td>
+            <td>{{ nr.activated }}</td>
+            <td>{{ nr.sid }}</td>
+            <td>{{ nr.psn }}</td>
+            <td>{{ nr.mode }}</td>
+            <td>{{ nr.feature_options }}</td>
+            <td>{{ nr.profile_id }}</td>
+            <td>{{ nr.profile_name }}</td>
+            <td>{{ nr.profiles }}</td>
+            <td>{{ nr.ip_services_address }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
+
+<!-- DataTables 초기화 스크립트 -->
+{% block extra_js %}
+<script>
+    $(document).ready(function() {
+        // DataTables 초기화
+        $('#nr-table').DataTable({
+            "paging": true,           // 페이지네이션 활성화
+            "pageLength": 10,         // 한 페이지에 표시할 행 수
+            "lengthChange": true,     // 표시할 행 수 조정 옵션
+            "ordering": true,         // 컬럼 정렬 가능
+            "searching": true,        // 검색 창 표시
+            "info": true,             // 정보 표시
+            "autoWidth": false,       // 자동 너비 설정 끄기
+            "language": {
+                "paginate": {
+                    "first": "처음",
+                    "last": "마지막",
+                    "next": "다음",
+                    "previous": "이전"
+                },
+                "search": "검색:",
+                "lengthMenu": "페이지당 _MENU_ 개씩 보기",
+                "info": "총 _TOTAL_ 개 항목 중 _START_ 부터 _END_ 까지 표시"
+            }
+        });
+    });
+</script>
+{% endblock %}

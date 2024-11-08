@@ -19,8 +19,10 @@ from django.urls import include, path
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/', include('billing.api.urls')), # API URL 추가
+
     path('table/', include('table.urls')),
     path('polls/', include('polls.urls')), # include: URL 패턴을 포함할 때 항상 사용
     path("cdr/", include("cdr.urls")),
-
+    path("nr/", include("networkreport.urls")),
 ]
