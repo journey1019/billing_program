@@ -10,11 +10,13 @@ from rest_framework import viewsets
 from rest_framework import filters
 from rest_framework.pagination import PageNumberPagination
 from .serializers import NetworkReportSerializer
-
+from django.utils import timezone
+from datetime import datetime
 
 def NetworkReportUploadCSV(request):
     if request.method == "POST":
         csv_files = request.FILES.getlist("csv_file")
+
         for csv_file in csv_files:
             if UploadedNRFile.objects.filter(file_name=csv_file.name).exists():
                 messages.error(request, f"파일 '{csv_file.name}'은 이미 업로드된 파일입니다.")
@@ -29,14 +31,27 @@ def NetworkReportUploadCSV(request):
             for row in transformed_data:
                 row["ip_service_address"] = row.pop("IP_SERVICE_ADDRESS", None)
 
-                # activated 필드가 없거나 NULL일 경우 기본 날짜로 설정
+                # activated 필드 값 처리
                 activated_value = row.get("activated")
                 if not activated_value or activated_value.upper() == "NULL":
-                    activated_value = "2000-01-01 00:00:00.000"
+                    activated_dt = "2000-01-01 00:00:00.000"
+                else:
+                    activated_dt = activated_value
 
-                # Parse the activated value into a datetime object
-                activated_dt = parse_datetime(activated_value)
+                # if not activated_value or activated_value.upper() == "NULL":
+                #     activated_dt = timezone.make_aware(datetime(2000, 1, 1))  # 기본값 설정
+                # else:
+                #     activated_dt = parse_datetime(activated_value)
+                #     if activated_dt is not None:
+                #         activated_dt = timezone.make_aware(activated_dt) if activated_dt.tzinfo is None else activated_dt
+                #     else:
+                #         print(f"잘못된 날짜 형식: {activated_value}")
+                #         continue  # 형식이 잘못된 경우 건너뜁니다
+                #
+                # if activated_value == "NULL":
+                #     activated_dt = "2000-01-01 00:00:00.000"
 
+                # 중복 데이터 체크 및 삽입
                 existing_nr = NetworkReport.objects.filter(
                     sp_id=row["sp_id"],
                     serial_number=row["serial_number"],
@@ -44,7 +59,7 @@ def NetworkReportUploadCSV(request):
                 ).first()
 
                 if existing_nr:
-                    print(f"중복된 값 발견: sp_id={row['sp_id']}, serial_number={row['serial_number']}, activated={row['activated']}")
+                    print(f"중복된 값 발견: sp_id={row['sp_id']}, serial_number={row['serial_number']}, activated={activated_value}")
                 else:
                     try:
                         NetworkReport.objects.update_or_create(
@@ -64,7 +79,7 @@ def NetworkReportUploadCSV(request):
                             }
                         )
                     except IntegrityError:
-                        print(f"중복된 값 발견 (예외 처리): sp_id={row['sp_id']}, serial_number={row['serial_number']}, activated={row['activated']}")
+                        print(f"중복된 값 발견 (예외 처리): sp_id={row['sp_id']}, serial_number={row['serial_number']}, activated={activated_value}")
 
             uploaded_file = UploadedNRFile(file_name=csv_file.name, file=csv_file)
             uploaded_file.save()
@@ -84,10 +99,8 @@ def NRTable(request):
 
     return render(request, "nr/nr_table.html", {"page_obj": page_obj})
 
-class NRViewSet(viewsets.ModelViewSet): # ModelViewSet은
-    queryset = NetworkReport.objects.all()  # 모든 NR 객체를 반환
-    serializer_class = NetworkReportSerializer  # 직렬화 클래스 설정
+class NRViewSet(viewsets.ModelViewSet):
+    queryset = NetworkReport.objects.all()
+    serializer_class = NetworkReportSerializer
     filter_backends = [filters.OrderingFilter, filters.SearchFilter]
-
-    # 페이지네이션 설정
     pagination_class = PageNumberPagination

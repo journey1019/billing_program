@@ -4,19 +4,20 @@ from datetime import datetime, timezone
 import pytz
 
 class NetworkReport(models.Model):
-    id = models.AutoField(primary_key = True)
+    id = models.AutoField(primary_key=True)
     sp_id = models.IntegerField()
     serial_number = models.CharField(max_length=64)
-    terminal_id = models.CharField(max_length=64)
-    activated = models.DateTimeField(default=datetime(2000,1,1,tzinfo=timezone.utc))  # 기본값 설정
-    sid = models.CharField(max_length=64)
-    psn = models.CharField(max_length=64)
+    terminal_id = models.CharField(max_length=64, null=True)
+    activated = models.CharField(max_length=100, default="2000-01-01 00:00:00.000")
+    # activated = models.DateTimeField(default=datetime(2000,1,1,tzinfo=timezone.utc))  # 기본값 설정
+    sid = models.CharField(max_length=64, null=True)
+    psn = models.CharField(max_length=64, null=True)
     mode = models.CharField(max_length=64)
     feature_options = models.CharField(max_length=64)
     profile_id = models.IntegerField()
     profile_name = models.CharField(max_length=64)
     profiles = models.IntegerField()
-    ip_service_address = models.CharField(max_length=64)
+    ip_service_address = models.CharField(max_length=64, null=True)
 
     class Meta:
         unique_together = ("sp_id", "serial_number", "activated")
@@ -30,10 +31,10 @@ class NetworkReport(models.Model):
             raise ValidationError("Duplicate entry found for sp_id, serial_number, activated.")
 
         # activated 필드가 비어있을 경우 기본값 설정
-        if not self.activated:
-            self.activated = timezone.datetime(2000, 1, 1)
         # if not self.activated:
-        #     self.activated = "2000-01-01 00:00:00.000"
+        #     self.activated = timezone.datetime(2000, 1, 1)
+        if not self.activated:
+            self.activated = "2000-01-01 00:00:00.000"
 
         super().save(*args, **kwargs)
 
