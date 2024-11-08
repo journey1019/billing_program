@@ -25,4 +25,5 @@ urlpatterns = [
     path('polls/', include('polls.urls')), # include: URL 패턴을 포함할 때 항상 사용
     path("cdr/", include("cdr.urls")),
     path("nr/", include("networkreport.urls")),
+    path("account/", include("account.urls")),
 ]

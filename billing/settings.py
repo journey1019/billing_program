@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'polls.apps.PollsConfig',
     'cdr.apps.CdrConfig',
     'networkreport.apps.NetworkreportConfig',
+    'account.apps.AccountConfig',
 
     'django.contrib.admin',
     'django.contrib.auth',

@@ -1,0 +1,27 @@
+{% extends "base_generic.html" %}
+{% block content %}
+<h2>계정 목록</h2>
+<a href="{% url 'account:account_create' %}">새 계정 생성</a>
+<table>
+    <tr>
+        <th>Acct_num</th>
+        <th>Acct_name</th>
+        <th>Acct_resident_num</th>
+        <th>Classification</th>
+        <th>Invoice_address</th>
+        <th>Invoice_address2</th>
+        <th>Invoice_postcode</th>
+    </tr>
+    {% for account in accounts %}
+    <tr>
+        <td>{{ account.acct_num }}</td>
+        <td>{{ account.acct_name }}</td>
+        <td>{{ account.acct_resident_num }}</td>
+        <td>{{ account.classification }}</td>
+        <td>{{ account.invoice_address }}</td>
+        <td>{{ account.invoice_address2 }}</td>
+        <td>{{ account.invoice_postcode }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
