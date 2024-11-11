@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'cdr.apps.CdrConfig',
     'networkreport.apps.NetworkreportConfig',
     'account.apps.AccountConfig',
+    'device.apps.DeviceConfig',
+    'pplan.apps.PplanConfig',
 
     'django.contrib.admin',
     'django.contrib.auth',

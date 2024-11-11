@@ -1,8 +1,15 @@
 {% extends "base_generic.html" %}
+
 {% block content %}
 <h2>계정 목록</h2>
 <a href="{% url 'account:account_create' %}">새 계정 생성</a>
-<table>
+
+<!-- DataTables 스타일링을 위한 CSS -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+
+<!-- 테이블 구조 -->
+<table id="accountTable" class="display">
+    <thead>
     <tr>
         <th>Acct_num</th>
         <th>Acct_name</th>
@@ -12,6 +19,8 @@
         <th>Invoice_address2</th>
         <th>Invoice_postcode</th>
     </tr>
+    </thead>
+    <tbody>
     {% for account in accounts %}
     <tr>
         <td>{{ account.acct_num }}</td>
@@ -23,5 +32,21 @@
         <td>{{ account.invoice_postcode }}</td>
     </tr>
     {% endfor %}
+    </tbody>
 </table>
+
+<!-- DataTables를 위한 JS -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#accountTable').DataTable({
+            "paging": true,  // 페이지네이션 활성화
+            "searching": true,  // 검색 기능 활성화
+            "ordering": true,  // 정렬 기능 활성화
+            "info": true,  // 페이지 정보 표시
+            "autoWidth": false  // 자동으로 열 너비 조정
+        });
+    });
+</script>
 {% endblock %}

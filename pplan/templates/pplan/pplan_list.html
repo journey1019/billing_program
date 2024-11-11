@@ -1,0 +1,58 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<h2>계정 목록</h2>
+<a href="{% url 'pplan:pplan_create' %}">새 계정 생성</a>
+
+<!-- DataTables 스타일링을 위한 CSS -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+
+<!-- 테이블 구조 -->
+<table id="pplanTable" class="display">
+    <thead>
+    <tr>
+        <th>ppid</th>
+        <th>basic_fee</th>
+        <th>subscription_fee</th>
+        <th>free_byte</th>
+        <th>surcharge_unit</th>
+        <th>each_surcharge_fee</th>
+        <th>apply_company</th>
+        <th>remarks</th>
+        <th>note</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for pplan in pplans %}
+    <tr>
+        <td>{{ pplan.ppid }}</td>
+        <td>{{ pplan.basic_fee }}</td>
+        <td>{{ pplan.subscription_fee }}</td>
+        <td>{{ pplan.free_byte }}</td>
+        <td>{{ pplan.surcharge_unit }}</td>
+        <td>{{ pplan.each_surcharge_fee }}</td>
+        <td>{{ pplan.apply_company }}</td>
+        <td>{{ pplan.remarks }}</td>
+        <td>{{ pplan.note }}</td>
+        <td>{{ pplan.alias }}</td>
+        <td>{{ pplan.remarks }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<!-- DataTables를 위한 JS -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#pplanTable').DataTable({
+            "paging": true,  // 페이지네이션 활성화
+            "searching": true,  // 검색 기능 활성화
+            "ordering": true,  // 정렬 기능 활성화
+            "info": true,  // 페이지 정보 표시
+            "autoWidth": false  // 자동으로 열 너비 조정
+        });
+    });
+</script>
+{% endblock %}

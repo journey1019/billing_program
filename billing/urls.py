@@ -26,4 +26,6 @@ urlpatterns = [
     path("cdr/", include("cdr.urls")),
     path("nr/", include("networkreport.urls")),
     path("account/", include("account.urls")),
+    path("device/", include("device.urls")),
+    path("pplan/", include("pplan.urls")),
 ]

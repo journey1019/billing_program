@@ -1,0 +1,60 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<h2>계정 목록</h2>
+<a href="{% url 'device:device_create' %}">새 계정 생성</a>
+
+<!-- DataTables 스타일링을 위한 CSS -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+
+<!-- 테이블 구조 -->
+<table id="deviceTable" class="display">
+    <thead>
+    <tr>
+        <th>device_manage_id</th>
+        <th>acct_num</th>
+        <th>profile_id</th>
+        <th>serial_number</th>
+        <th>activated</th>
+        <th>deactivated</th>
+        <th>ppid</th>
+        <th>modal_name</th>
+        <th>internet_mail_id</th>
+        <th>alias</th>
+        <th>remarks</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for device in devices %}
+    <tr>
+        <td>{{ device.device_manage_id }}</td>
+        <td>{{ device.acct_num }}</td>
+        <td>{{ device.profile_id }}</td>
+        <td>{{ device.serial_number }}</td>
+        <td>{{ device.activated }}</td>
+        <td>{{ device.deactivated }}</td>
+        <td>{{ device.ppid }}</td>
+        <td>{{ device.modal_name }}</td>
+        <td>{{ device.internet_mail_id }}</td>
+        <td>{{ device.alias }}</td>
+        <td>{{ device.remarks }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<!-- DataTables를 위한 JS -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#deviceTable').DataTable({
+            "paging": true,  // 페이지네이션 활성화
+            "searching": true,  // 검색 기능 활성화
+            "ordering": true,  // 정렬 기능 활성화
+            "info": true,  // 페이지 정보 표시
+            "autoWidth": false  // 자동으로 열 너비 조정
+        });
+    });
+</script>
+{% endblock %}

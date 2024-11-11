@@ -1,15 +1,14 @@
 from django.core.exceptions import ValidationError
 from django.db import models
 
-
 class Account(models.Model):
     acct_num = models.CharField(max_length=10, primary_key=True)
     acct_name = models.CharField(max_length=100)
-    acct_resident_num = models.BigIntegerField(null=True)
+    acct_resident_num = models.BigIntegerField(null=True, blank=True)
     classification = models.CharField(max_length=100)
-    invoice_address = models.CharField(max_length=100, null=True)
-    invoice_address2 = models.CharField(max_length=100, null=True)
-    invoice_postcode = models.IntegerField(null=True)
+    invoice_address = models.CharField(max_length=100, null=True, blank=True)
+    invoice_address2 = models.CharField(max_length=100, null=True, blank=True)
+    invoice_postcode = models.IntegerField(null=True, blank=True)
 
     class Meta:
         unique_together = ("acct_num",)

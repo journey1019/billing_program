@@ -9,12 +9,12 @@ from .forms import AccountForm
 from .serializers import AccountSerializer
 
 
-def account_list(request):
+def AccountList(request):
     accounts = Account.objects.all()
     return render(request, 'account/account_list.html', {'accounts': accounts})
 
 
-def account_create(request):
+def AccountCreate(request):
     if request.method == 'POST':
         form = AccountForm(request.POST)
         if form.is_valid():
