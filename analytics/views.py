@@ -7,18 +7,31 @@ from .serializers import CdrDeviceDataSerializer
 
 class CdrDeviceView(APIView):
     def get(self, request, *args, **kwargs):
-        # 모든 Cdr 객체 가져오기
-        cdr_data = CDR.objects.all()
+        # 필수 파라미터인 date_index를 가져옴
+        date_index = request.query_params.get('date_index')
+        # 선택 파라미터인 serial_number을 가져옴
+        serial_number = request.query_params.get('serial_number')
 
-        # 시리얼라이저로 데이터 직렬화 및 가공
-        serializer = CdrDeviceDataSerializer(cdr_data, many=True)
+        if not date_index:
+            return Response(
+                {"error": "date_index parameter is required."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        # 기본 쿼리셋: date_index를 기준으로 필터링
+        queryset = CDR.objects.filter(date_index=date_index)
 
-        # 객체의 개수를 구함
-        count = cdr_data.count()
+        # serial_number 파라미터가 제공되면 해당 조건 추가 필터링
+        if serial_number:
+            queryset = queryset.filter(serial_number=serial_number)
 
-        # 가공된 JSON 데이터를 반환
+        # 직렬화
+        serializer = CdrDeviceDataSerializer(queryset, many=True)
+
+        # 필터링된 객체 수를 계산하여 응답에 포함
+        count = queryset.count()
+
         return Response({
             "count": count,
             "results": serializer.data,
-            "status":status.HTTP_200_OK
         })
+
