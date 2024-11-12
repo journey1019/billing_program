@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Sum
 
 class BillingDataView(models.Model):
     datestamp = models.DateField(primary_key=True)
@@ -21,11 +22,21 @@ class BillingDataView(models.Model):
     remarks = models.TextField()
     note = models.TextField()
 
+    def get_total_fee(self, date_index):
+        # 같은 serial_number에 대한 total_fee 계산
+        total_fee = BillingDataView.objects.filter(
+            serial_number=self.serial_number, date_index=date_index
+        ).aggregate(Sum('amount'))['amount__sum']
+        return total_fee
+
+    def get_total_day(self, start_date, end_date):
+        # 시작일과 종료일 사이의 총 일수를 계산
+        delta = end_date - start_date
+        return delta.days
+
     class Meta:
         managed = False  # 이 모델은 DB에서 직접 관리되는 뷰이므로 False로 설정
         db_table = 'billing_data_view'  # 뷰 테이블명 지정
-
-
 
 class Account(models.Model):
     acct_num = models.CharField(max_length=10, primary_key=True)
@@ -35,7 +46,6 @@ class Account(models.Model):
     invoice_address = models.CharField(max_length=100, null=True, blank=True)
     invoice_address2 = models.CharField(max_length=100, null=True, blank=True)
     invoice_postcode = models.IntegerField(null=True, blank=True)
-
 
 class Pplan(models.Model):
     ppid = models.IntegerField(primary_key=True, unique=True)  # Primary Key 설정

@@ -3,6 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
+from datetime import datetime
 from django.shortcuts import get_object_or_404
 from django.db import connection
 from django.http import JsonResponse
@@ -67,7 +68,6 @@ class AggregatedDataAPIView(APIView):
 
 @api_view(['GET'])
 def GenerateBillingData(request):
-    # URL에서 date_index 파라미터를 가져옴
     date_index = request.GET.get('date_index')
 
     if not date_index:
@@ -80,9 +80,21 @@ def GenerateBillingData(request):
     if not data:
         return JsonResponse({'error': 'No data found for the given date_index'}, status=404)
 
-    # 데이터를 JSON으로 변환
     result = []
     for row in data:
+        # 동일한 serial_number로 그룹화하여 total_fee 계산
+        total_fee = row.get_total_fee(date_index)
+
+        # 'date'에 해당하는 시작일과 종료일 계산
+        start_date = datetime.strptime(row.date, '%Y-%m-%d')  # 예시: '2024-06-01'
+        if row.d_product == 'DCT':
+            # d_product가 'DCT'일 경우 다른 방식으로 종료일 계산
+            end_date = datetime.strptime('2024-06-30', '%Y-%m-%d')  # 예시
+        else:
+            end_date = start_date  # 날짜가 하나일 경우 종료일은 시작일과 동일
+
+        total_day = row.get_total_day(start_date, end_date)
+
         result.append({
             'datestamp': row.datestamp,
             'discount_code': row.discount_code,
@@ -102,7 +114,9 @@ def GenerateBillingData(request):
             'each_surcharge_fee': row.each_surcharge_fee,
             'apply_company': row.apply_company,
             'remarks': row.remarks,
-            'note': row.note
+            'note': row.note,
+            'total_fee': total_fee,  # 추가된 총 요금
+            'total_day': total_day,  # 추가된 총 일수
         })
 
     return JsonResponse(result, safe=False)

@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'account.apps.AccountConfig',
     'device.apps.DeviceConfig',
     'pplan.apps.PplanConfig',
+    'analytics.apps.AnalyticsConfig',
 
     'django.contrib.admin',
     'django.contrib.auth',
