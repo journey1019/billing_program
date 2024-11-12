@@ -16,6 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from .views import AggregatedDataAPIView, GenerateBillingData
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -28,4 +29,7 @@ urlpatterns = [
     path("account/", include("account.urls")),
     path("device/", include("device.urls")),
     path("pplan/", include("pplan.urls")),
+
+    path('api/aggregated-data/', AggregatedDataAPIView.as_view(), name='aggregated-data'),
+    path('billing/generate/', GenerateBillingData, name='generate_billing_data'),
 ]

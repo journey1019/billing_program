@@ -2,13 +2,15 @@ import csv
 from django.core.paginator import Paginator
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .models import CDR, UploadedFile
+from .models import CDR, UploadedFile, CDRSummary
 from datetime import datetime
-from django.db import IntegrityError
-from rest_framework import viewsets
-from rest_framework import filters
+from django.db import IntegrityError, transaction
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import viewsets, filters, status
+from rest_framework.views import APIView
+from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
-from .serializers import CDRSerializer
+from .serializers import CDRSerializer, CDRSummarySerializer
 
 # CDR.csv Upload
 def CDRUploadCSV(request):
@@ -95,14 +97,49 @@ def CDRTable(request):
 
     return render(request, "cdr/cdr_table.html", {"page_obj": page_obj})
 
-# CDR API
-class CDRViewSet(viewsets.ModelViewSet): # ModelViewSet은
+class CDRSummaryCreateView(APIView):
+    def post(self, request, *args, **kwargs):
+        try:
+            # cdr 테이블에서 필요한 데이터만 추출
+            cdr_data = CDR.objects.values('datestamp', 'discount_code', 'd_product', 'volume_units',
+                                          'profile_id', 'serial_number', 'amount', 'date', 'date_index')
+
+            for row in cdr_data:
+                # cdrSummary 테이블에 데이터 삽입
+                CDRSummary.objects.create(
+                    datestamp=row['datestamp'],
+                    discount_code=row.get('discount_code'),
+                    d_product=row.get('d_product'),
+                    volume_units=row.get('volume_units'),
+                    profile_id=row.get('profile_id'),
+                    serial_number=row['serial_number'],
+                    amount=row.get('amount'),
+                    date=row['date'],
+                    date_index=row['date_index']
+                )
+
+            return Response({"message": "CDR Summary data inserted successfully"}, status=status.HTTP_201_CREATED)
+
+        except IntegrityError:
+            return Response({"error": "Data insertion failed due to integrity issue"}, status=status.HTTP_400_BAD_REQUEST)
+
+class CDRSummaryViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = CDRSummary.objects.all()  # CDRSummary 테이블의 모든 데이터를 조회
+    serializer_class = CDRSummarySerializer  # 직렬화 클래스
+
+
+# 페이지네이션 기본 설정
+class CustomPageNumberPagination(PageNumberPagination):
+    page_size = 10  # 한 페이지에 표시할 기본 객체 수 설정
+    page_size_query_param = 'page_size'  # 페이지 크기 사용자 설정 옵션 추가
+    max_page_size = 100  # 최대 페이지 크기 제한
+
+class CDRViewSet(viewsets.ModelViewSet):
     queryset = CDR.objects.all()  # 모든 CDR 객체를 반환
     serializer_class = CDRSerializer  # 직렬화 클래스 설정
-    filter_backends = [filters.OrderingFilter, filters.SearchFilter]
+    filter_backends = [filters.OrderingFilter, filters.SearchFilter, DjangoFilterBackend]
     search_fields = ['record_type', 'region']  # 검색할 필드
     ordering_fields = ['datestamp']  # 정렬할 필드
     ordering = ['-datestamp']  # 기본 정렬 기준
-
-    # 페이지네이션 설정
-    pagination_class = PageNumberPagination
+    filterset_fields = ['serial_number', 'date_index']  # 필터링할 필드
+    pagination_class = CustomPageNumberPagination  # 커스텀 페이지네이션 클래스 적용

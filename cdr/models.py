@@ -60,6 +60,21 @@ class CDR(models.Model):
         super().save(*args, **kwargs)
 
 
+class CDRSummary(models.Model):
+    datestamp = models.CharField(max_length=100)
+    discount_code = models.CharField(max_length=5)
+    d_product = models.CharField(max_length=10)
+    volume_units = models.IntegerField()
+    profile_id = models.IntegerField()
+    serial_number = models.CharField(max_length=64)
+    amount = models.IntegerField()
+    date = models.CharField(max_length=100)
+    date_index = models.CharField(max_length=100)
+
+    def __str__(self):
+        return f"{self.serial_number} - {self.datestamp}"
+
+
 # 업로드 된 파일 이름과 파일 경로 저장 & 중복된 파일 이름을 허용하지 안함
 class UploadedFile(models.Model):
     file_name = models.CharField(max_length=225, unique=True) # 파일 이름은 고유함

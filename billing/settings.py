@@ -31,7 +31,9 @@ ALLOWED_HOSTS = []
 # Application definition
 INSTALLED_APPS = [
     'rest_framework', # Django REST framework
+    'django_filters',
 
+    'billing',
     'table.apps.TableConfig',
     'polls.apps.PollsConfig',
     'cdr.apps.CdrConfig',
