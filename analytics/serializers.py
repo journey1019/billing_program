@@ -20,9 +20,9 @@ class CdrDeviceDataSerializer(serializers.ModelSerializer):
     class Meta:
         model = CDR
         fields = [
-            'id', 'record_type', 'record_id', 'datestamp', 'transaction_type',
+            'id', 'record_type', 'record_id', 'date_stamp', 'transaction_type',
             'discount_code', 'd_product', 'msg_id', 'volume_unit_type', 'volume_units',
-            'access_id', 'profile_id', 'serial_number', 'region', 'amount', 'date',
+            'access_id', 'profile_id', 'serial_number', 'region', 'amount', 'date_only',
             'date_index', 'acct_num', 'acct_name', 'ppid',
             'basic_fee', 'subscription_fee', 'free_byte', 'surcharge_unit',
             'each_surcharge_fee', 'apply_company', 'remarks', 'note'

@@ -25,8 +25,8 @@ class CdrDeviceView(APIView):
         if serial_number:
             queryset = queryset.filter(serial_number=serial_number)
 
-        # datestamp 기준으로 정렬
-        queryset = queryset.order_by('datestamp')
+        # date_stamp 기준으로 정렬
+        queryset = queryset.order_by('date_stamp')
 
         # `d_product`가 `%DCT`로 끝나는 값이 있는지 확인
         dct_indices = [i for i, record in enumerate(queryset) if record.d_product.endswith('DCT')]

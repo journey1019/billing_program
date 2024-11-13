@@ -35,20 +35,21 @@ def CDRUploadCSV(request):
 
                 # datestamp를 그대로 문자열로 사용 (형식: "2024-08-01 00:00:00")
                 datestamp = row["datestamp"]
-                date = datestamp.split()[0]  # "YYYY-MM-DD"
+                date_stamp = row["datestamp"]
+                date_only = datestamp.split()[0]  # "YYYY-MM-DD"
                 date_index = datestamp.replace("-", "")[:6]  # "YYYYMM"
 
                 # 중복 여부 체크 (unique_together 필드를 기준으로)
                 existing_cdr = CDR.objects.filter(
                     serial_number=row["serial_number"],
-                    datestamp=datestamp,
+                    date_stamp=date_stamp,
                     d_product=row["d_product"],
                     msg_id=row["msg_id"]
                 ).first()
 
                 if existing_cdr:
                     # 중복된 값이 있으면 터미널에 출력
-                    print(f"중복된 값 발견: serial_number={row['serial_number']}, msg_id={row['msg_id']}, datestamp={datestamp}, d_product={row['d_product']}")
+                    print(f"중복된 값 발견: serial_number={row['serial_number']}, msg_id={row['msg_id']}, date_stamp={date_stamp}, d_product={row['d_product']}")
                 else:
                     # 중복된 값이 없다면 데이터를 저장
                     try:
@@ -56,7 +57,7 @@ def CDRUploadCSV(request):
                             serial_number=row["serial_number"],
                             msg_id=row["msg_id"],
                             d_product=row["d_product"],
-                            datestamp=datestamp,  # 문자열 그대로 저장
+                            date_stamp=date_stamp,  # 문자열 그대로 저장
                             defaults={
                                 "record_type": row.get("record_type"),
                                 "record_id": row.get("record_id"),
@@ -68,13 +69,13 @@ def CDRUploadCSV(request):
                                 "profile_id": row.get("profile_id"),
                                 "region": row.get("region"),
                                 "amount": row.get("amount"),
-                                "date": date,  # YYYY-MM-DD 형식으로 저장
+                                "date_only": date_only,  # YYYY-MM-DD 형식으로 저장
                                 "date_index": date_index  # YYYYMM 형식으로 저장
                             }
                         )
                     except IntegrityError:
                         # 중복된 값 발견 시 예외 처리
-                        print(f"중복된 값 발견 (예외 처리): serial_number={row['serial_number']}, msg_id={row['msg_id']}, datestamp={datestamp}, d_product={row['d_product']}")
+                        print(f"중복된 값 발견 (예외 처리): serial_number={row['serial_number']}, msg_id={row['msg_id']}, date_stamp={date_stamp}, d_product={row['d_product']}")
 
             # 업로드된 파일을 기록
             uploaded_file = UploadedFile(file_name=csv_file.name, file=csv_file)
@@ -101,20 +102,20 @@ class CDRSummaryCreateView(APIView):
     def post(self, request, *args, **kwargs):
         try:
             # cdr 테이블에서 필요한 데이터만 추출
-            cdr_data = CDR.objects.values('datestamp', 'discount_code', 'd_product', 'volume_units',
-                                          'profile_id', 'serial_number', 'amount', 'date', 'date_index')
+            cdr_data = CDR.objects.values('date_stamp', 'discount_code', 'd_product', 'volume_units',
+                                          'profile_id', 'serial_number', 'amount', 'date_only', 'date_index')
 
             for row in cdr_data:
                 # cdrSummary 테이블에 데이터 삽입
                 CDRSummary.objects.create(
-                    datestamp=row['datestamp'],
+                    date_stamp=row['date_stamp'],
                     discount_code=row.get('discount_code'),
                     d_product=row.get('d_product'),
                     volume_units=row.get('volume_units'),
                     profile_id=row.get('profile_id'),
                     serial_number=row['serial_number'],
                     amount=row.get('amount'),
-                    date=row['date'],
+                    date_only=row['date_only'],
                     date_index=row['date_index']
                 )
 
@@ -139,7 +140,7 @@ class CDRViewSet(viewsets.ModelViewSet):
     serializer_class = CDRSerializer  # 직렬화 클래스 설정
     filter_backends = [filters.OrderingFilter, filters.SearchFilter, DjangoFilterBackend]
     search_fields = ['record_type', 'region']  # 검색할 필드
-    ordering_fields = ['datestamp']  # 정렬할 필드
-    ordering = ['-datestamp']  # 기본 정렬 기준
+    ordering_fields = ['date_stamp']  # 정렬할 필드
+    ordering = ['-date_stamp']  # 기본 정렬 기준
     filterset_fields = ['serial_number', 'date_index']  # 필터링할 필드
     pagination_class = CustomPageNumberPagination  # 커스텀 페이지네이션 클래스 적용

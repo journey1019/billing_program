@@ -1,13 +1,14 @@
 from django.core.exceptions import ValidationError
 from django.db import models
-from datetime import datetime, timezone
+from django.utils import timezone
+from datetime import datetime
 import pytz
 
 class CDR(models.Model):
     id = models.AutoField(primary_key=True)
     record_type = models.CharField(max_length=3)
     record_id = models.IntegerField()
-    datestamp = models.CharField(max_length=100)
+    date_stamp = models.DateTimeField()
     transaction_type = models.CharField(max_length=3)
     discount_code = models.CharField(max_length=5)
     d_product = models.CharField(max_length=10)
@@ -20,59 +21,54 @@ class CDR(models.Model):
     region = models.CharField(max_length=10, null=True)
     amount = models.IntegerField()
 
-    # Auto-generated fields based on `datestamp`
-    date = models.CharField(max_length=100)
-    date_index = models.CharField(max_length=100)
+    # Auto-generated fields based on `date_stamp`
+    date_only = models.DateField()
+    date_index = models.CharField(max_length=6)
 
     class Meta:
         # Unique constraint to avoid duplicates
-        unique_together = ("serial_number", "datestamp", "d_product", "msg_id")
+        unique_together = ("serial_number", "date_stamp", "d_product", "msg_id")
 
     def save(self, *args, **kwargs):
         # Check for duplicates based on constraints
         if CDR.objects.filter(
             serial_number = self.serial_number,
-            datestamp = self.datestamp,
+            date_stamp = self.date_stamp,
             d_product = self.d_product,
             msg_id = self.msg_id
         ).exists():
-            raise ValidationError("Duplicate entry found for serial_number, datestamp, d_product, and msg_id.")
+            raise ValidationError("Duplicate entry found for serial_number, date_stamp, d_product, and msg_id.")
 
-        # Convert datestamp to datetime object
-        if self.datestamp:
-            try:
-                # Assuming datestamp format is "YYYY-MM-DD HH:MM:SS"
-                datestamp_obj = datetime.strptime(self.datestamp, "%Y-%m-%d %H:%M:%S")
+        # Convert date_stamp to datetime if it's a string
+        if isinstance(self.date_stamp, str):
+            self.date_stamp = datetime.strptime(self.date_stamp, "%Y-%m-%d %H:%M:%S")
 
-                # Convert to timezone-aware datetime (UTC first)
-                # datestamp_obj = timezone.make_aware(datestamp_obj, timezone.utc)
-                # Convert to KST (UTC+9)
-                # kst_datestamp = datestamp_obj.astimezone(timezone.pytz.timezone('Asia/Seoul'))
+        # Convert datetime to Asia/Seoul time zone
+        # self.date_stamp = pytz.timezone('Asia/Seoul').localize(self.date_stamp)
 
-                # Automatically set `date` and `date_index` based on `datestamp`
-                self.date = datestamp_obj.date().strftime("%Y-%m-%d")  # "YYYY-MM-DD"
-                self.date_index = datestamp_obj.strftime("%Y%m")  # "YYYYMM"
-            except ValueError:
-                # Handle the error if the date format is incorrect
-                raise ValidationError("Invalid datestamp format. Expected 'YYYY-MM-DD HH:MM:SS'.")
-                # pass
+        # If timezone-aware, you can make it naive (if needed) or proceed with aware datetime
+        # self.date_stamp = timezone.make_naive(self.date_stamp, timezone=pytz.timezone('Asia/Seoul'))
+
+        # self.date_stamp = datetime.strptime(self.date_stamp, "%Y-%m-%d %H:%M:%S")
+        self.date_only = self.date_stamp.date()  # YYYY-MM-DD 형식
+        self.date_index = self.date_stamp.strftime("%Y%m")  # YYYYMM 형식
 
         super().save(*args, **kwargs)
 
 
 class CDRSummary(models.Model):
-    datestamp = models.CharField(max_length=100)
+    date_stamp = models.DateTimeField()
     discount_code = models.CharField(max_length=5)
     d_product = models.CharField(max_length=10)
     volume_units = models.IntegerField()
     profile_id = models.IntegerField()
     serial_number = models.CharField(max_length=64)
     amount = models.IntegerField()
-    date = models.CharField(max_length=100)
-    date_index = models.CharField(max_length=100)
+    date_only = models.DateField()
+    date_index = models.CharField(max_length=6)
 
     def __str__(self):
-        return f"{self.serial_number} - {self.datestamp}"
+        return f"{self.serial_number} - {self.date_stamp}"
 
 
 # 업로드 된 파일 이름과 파일 경로 저장 & 중복된 파일 이름을 허용하지 안함

@@ -10,7 +10,7 @@
         <tr>
             <th>Record Type</th>
             <th>Record ID</th>
-            <th>Datestamp</th>
+            <th>Date Stamp</th>
             <th>Transaction Type</th>
             <th>Discount Code</th>
             <th>D Product</th>
@@ -22,7 +22,7 @@
             <th>Serial Number</th>
             <th>Region</th>
             <th>Amount</th>
-            <th>Date</th>
+            <th>Date Only</th>
             <th>Date Index</th>
         </tr>
         </thead>
@@ -31,7 +31,7 @@
         <tr>
             <td>{{ cdr.record_type }}</td>
             <td>{{ cdr.record_id }}</td>
-            <td>{{ cdr.datestamp }}</td>
+            <td>{{ cdr.date_stamp }}</td>
             <td>{{ cdr.transaction_type }}</td>
             <td>{{ cdr.discount_code }}</td>
             <td>{{ cdr.d_product }}</td>
@@ -43,7 +43,7 @@
             <td>{{ cdr.serial_number }}</td>
             <td>{{ cdr.region }}</td>
             <td>{{ cdr.amount }}</td>
-            <td>{{ cdr.date }}</td>
+            <td>{{ cdr.date_only }}</td>
             <td>{{ cdr.date_index }}</td>
         </tr>
         {% endfor %}

@@ -10,5 +10,5 @@ class CDRSerializer(serializers.ModelSerializer):
 class CDRSummarySerializer(serializers.ModelSerializer):
     class Meta:
         model = CDRSummary
-        fields = ['datestamp', 'discount_code', 'd_product', 'volume_units', 'profile_id',
-                  'serial_number', 'amount', 'date', 'date_index']
+        fields = ['date_stamp', 'discount_code', 'd_product', 'volume_units', 'profile_id',
+                  'serial_number', 'amount', 'date_only', 'date_index']

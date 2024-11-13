@@ -2,14 +2,14 @@ from django.db import models
 from django.db.models import Sum
 
 class BillingDataView(models.Model):
-    datestamp = models.DateField(primary_key=True)
+    date_stamp = models.DateField(primary_key=True)
     discount_code = models.CharField(max_length=255)
     d_product = models.CharField(max_length=255)
     volume_units = models.IntegerField()
     profile_id = models.IntegerField()
     serial_number = models.CharField(max_length=255)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
-    date = models.DateField()
+    date_only = models.DateField()
     date_index = models.CharField(max_length=6)  # YYYYMM 형식으로 저장된다고 가정
     acct_num = models.CharField(max_length=255)
     acct_resident_num = models.CharField(max_length=255)

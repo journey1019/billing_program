@@ -74,7 +74,7 @@ def GenerateBillingData(request):
         return JsonResponse({'error': 'Missing date_index parameter'}, status=400)
 
     # date_index에 해당하는 데이터 조회
-    data = BillingDataView.objects.filter(date_index=date_index).order_by('serial_number', 'datestamp')
+    data = BillingDataView.objects.filter(date_index=date_index).order_by('serial_number', 'date_stamp')
 
     # 데이터가 없다면 에러 메시지 반환
     if not data:
@@ -96,14 +96,14 @@ def GenerateBillingData(request):
         total_day = row.get_total_day(start_date, end_date)
 
         result.append({
-            'datestamp': row.datestamp,
+            'date_stamp': row.date_stamp,
             'discount_code': row.discount_code,
             'd_product': row.d_product,
             'volume_units': row.volume_units,
             'profile_id': row.profile_id,
             'serial_number': row.serial_number,
             'amount': row.amount,
-            'date': row.date,
+            'date_only': row.date_only,
             'date_index': row.date_index,
             'acct_num': row.acct_num,
             'acct_resident_num': row.acct_resident_num,
@@ -134,9 +134,9 @@ def GetBillingDataFromView(request):
         return Response({"message": "No data found for the given date_index"}, status=404)
 
     # 데이터를 직렬화하여 반환
-    data = [{"datestamp": item.datestamp, "discount_code": item.discount_code, "d_product": item.d_product,
+    data = [{"date_stamp": item.datestamp, "discount_code": item.discount_code, "d_product": item.d_product,
              "volume_units": item.volume_units, "serial_number": item.serial_number, "amount": item.amount,
-             "date": item.date, "date_index": item.date_index, "acct_num": item.acct_num, "ppid": item.ppid}
+             "date_only": item.date, "date_index": item.date_index, "acct_num": item.acct_num, "ppid": item.ppid}
             for item in billing_data]
 
     return Response({"billing_data": data}, status=200)

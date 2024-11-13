@@ -26,7 +26,7 @@ class Command(BaseCommand):
                         CDR.objects.create(
                             record_type=row['record_type'],
                             record_id=row['record_id'],
-                            datestamp=row['datestamp'],
+                            date_stamp=row['date_stamp'],
                             transaction_type=row['transaction_type'],
                             discount_code=row['discount_code'],
                             d_product=row['d_product'],
