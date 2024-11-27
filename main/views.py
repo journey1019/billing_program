@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Post
 
 # Create your views here.
@@ -31,3 +31,10 @@ def new_post(request):
             )
         return redirect('/blog/')
     return render(request, 'main/new_post.html')
+
+def remove_post(request, pk):
+    post = Post.objects.get(pk=pk)
+    if request.method == 'POST':
+        post.delete()
+        return redirect('/blog/')
+    return render(request, 'main/remove_post.html', {'Post': post})
