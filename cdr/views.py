@@ -11,9 +11,29 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
 from .serializers import CDRSerializer, CDRSummarySerializer
+from django.db import connection
+from django.core.management import call_command
 
 # CDR.csv Upload
 def CDRUploadCSV(request):
+    # Check if the CDR table exists in the database
+    # with connection.cursor() as cursor:
+    #     cursor.execute("""
+    #         SELECT EXISTS (
+    #             SELECT 1
+    #             FROM information_schema.tables
+    #             WHERE table_name = 'cdr'
+    #         )
+    #     """)
+    #     table_exists = cursor.fetchone()[0]
+    #
+    # # If the table does not exist, run migrations to create it
+    # if not table_exists:
+    #     call_command("makemigrations", "cdr")  # Generate migration files
+    #     call_command("migrate", "cdr")        # Apply migrations
+    #     messages.success(request, "CDR 테이블이 생성되었습니다. CSV 파일을 업로드하세요.")
+    #     return redirect("cdr:upload_csv")
+
     if request.method == "POST":
         csv_files = request.FILES.getlist("csv_file")  # 여러 파일을 가져옴
         for csv_file in csv_files:

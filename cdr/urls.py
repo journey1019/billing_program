@@ -13,5 +13,4 @@ urlpatterns = [
     path("cdr_table/", CDRTable, name="cdr_table"),
     path('cdrsummary/create/', CDRSummaryCreateView.as_view(), name='cdr-summary-create'),  # POST 요청으로 데이터 삽입
     path("api/", include(router.urls)), # API 엔드포인트를 포함
-
 ]

@@ -15,10 +15,10 @@ class CDR(models.Model):
     msg_id = models.BigIntegerField()
     volume_unit_type = models.CharField(max_length=3)
     volume_units = models.IntegerField()
-    access_id = models.CharField(max_length=100, null=True)
+    access_id = models.CharField(max_length=100, null=True, blank=True)
     profile_id = models.IntegerField()
     serial_number = models.CharField(max_length=64)
-    region = models.CharField(max_length=10, null=True)
+    region = models.CharField(max_length=10, null=True, blank=True)
     amount = models.IntegerField()
 
     # Auto-generated fields based on `date_stamp`
@@ -58,6 +58,9 @@ class CDR(models.Model):
         self.date_index = self.date_stamp.strftime("%Y%m")  # YYYYMM 형식
 
         super().save(*args, **kwargs)
+    # def __str__(self):
+    #     return f"{self.serial_number} - {self.date_stamp} - {self.d_product}"
+
 
 
 class CDRSummary(models.Model):

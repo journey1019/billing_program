@@ -100,26 +100,29 @@ REST_FRAMEWORK = {
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.postgresql',
+    #     'NAME': 'billing_db', # billing_db / polls_db
+    #     'USER': 'jihyeon',
+    #     'PASSWORD': '9312',
+    #     'HOST': 'localhost',
+    #     'PORT': '5432',
+    #     #     # 'ENGINE': 'django.db.backends.sqlite3',
+    #     #     # 'NAME': BASE_DIR / 'db.sqlite3',
+    # }
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'billing_db', # billing_db / polls_db
-        'USER': 'jihyeon',
-        'PASSWORD': '9312',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    #     # 'ENGINE': 'django.db.backends.sqlite3',
-    #     # 'NAME': BASE_DIR / 'db.sqlite3',
-    }
-    # 'default': {
-        # 'ENGINE': 'django.db.backends.postgresql',
-        # 'NAME': 'billing', # billing_db / polls_db
-        # 'USER': 'orbcomm',
-        # 'PASSWORD': '@gccko2512',
-        # 'HOST': '112.168.252.12',
-        # 'PORT': '29432',
+        'NAME': 'billing', # billing_db / polls_db
+        'USER': 'orbcomm',
+        'PASSWORD': '@gccko2512',
+        'HOST': '112.168.252.12',
+        'PORT': '29432',
+        # 'OPTIONS': {
+        #     'options': '-c search_path=billing_program,public' # 스키마 변경
+        # }
         # 'ENGINE': 'django.db.backends.sqlite3',
         # 'NAME': BASE_DIR / 'db.sqlite3',
-    # }
+    }
 }
 
 

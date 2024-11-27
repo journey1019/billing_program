@@ -10,8 +10,8 @@ from rest_framework import viewsets
 from rest_framework import filters
 from rest_framework.pagination import PageNumberPagination
 from .serializers import NetworkReportSerializer
-from django.utils import timezone
-from datetime import datetime
+# from django.utils import timezone
+from datetime import datetime, timezone
 
 def NetworkReportUploadCSV(request):
     if request.method == "POST":
@@ -34,45 +34,40 @@ def NetworkReportUploadCSV(request):
                 # activated 필드 값 처리
                 activated_value = row.get("activated")
                 if not activated_value or activated_value.upper() == "NULL":
-                    activated_dt = "2000-01-01 00:00:00.000"
+                    activated_dt = datetime(2000, 1, 1, 0, 0, 0, tzinfo=timezone.utc)
                 else:
-                    activated_dt = activated_value
-
-                # if not activated_value or activated_value.upper() == "NULL":
-                #     activated_dt = timezone.make_aware(datetime(2000, 1, 1))  # 기본값 설정
-                # else:
-                #     activated_dt = parse_datetime(activated_value)
-                #     if activated_dt is not None:
-                #         activated_dt = timezone.make_aware(activated_dt) if activated_dt.tzinfo is None else activated_dt
-                #     else:
-                #         print(f"잘못된 날짜 형식: {activated_value}")
-                #         continue  # 형식이 잘못된 경우 건너뜁니다
-                #
-                # if activated_value == "NULL":
-                #     activated_dt = "2000-01-01 00:00:00.000"
+                    try:
+                        activated_dt = datetime.strptime(activated_value, "%Y-%m-%d %H:%M:%S")
+                        if activated_dt.tzinfo is None:
+                            activated_dt = activated_dt.replace(tzinfo=timezone.utc)
+                    except ValueError:
+                        print(f"잘못된 날짜 형식: {activated_value}")
+                        messages.warning(request, f"잘못된 날짜 형식: {activated_value}")
+                        continue
 
                 # 중복 데이터 체크 및 삽입
                 existing_nr = NetworkReport.objects.filter(
                     sp_id=row["sp_id"],
                     serial_number=row["serial_number"],
-                    activated=activated_dt
+                    activated=activated_dt,
+                    profile_id=row["profile_id"]
                 ).first()
 
                 if existing_nr:
-                    print(f"중복된 값 발견: sp_id={row['sp_id']}, serial_number={row['serial_number']}, activated={activated_value}")
+                    print(f"중복된 값 발견: sp_id={row['sp_id']}, serial_number={row['serial_number']}, activated={activated_value}, profile_id={row['profile_id']}")
                 else:
                     try:
                         NetworkReport.objects.update_or_create(
                             sp_id=row["sp_id"],
                             serial_number=row["serial_number"],
                             activated=activated_dt,
+                            profile_id=row["profile_id"],
                             defaults={
                                 "terminal_id": row.get("terminal_id"),
                                 "sid": row.get("sid"),
                                 "psn": row.get("psn"),
                                 "mode": row.get("mode"),
                                 "feature_options": row.get("feature_options"),
-                                "profile_id": row.get("profile_id"),
                                 "profile_name": row.get("profile_name"),
                                 "profiles": row.get("profiles"),
                                 "ip_service_address": row.get("ip_service_address"),

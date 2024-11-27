@@ -8,8 +8,7 @@ class NetworkReport(models.Model):
     sp_id = models.IntegerField()
     serial_number = models.CharField(max_length=64)
     terminal_id = models.CharField(max_length=64, null=True)
-    activated = models.CharField(max_length=100, default="2000-01-01 00:00:00.000")
-    # activated = models.DateTimeField(default=datetime(2000,1,1,tzinfo=timezone.utc))  # 기본값 설정
+    activated = models.DateTimeField(default=datetime(2000, 1, 1, 0, 0, 0, tzinfo=timezone.utc))
     sid = models.CharField(max_length=64, null=True)
     psn = models.CharField(max_length=64, null=True)
     mode = models.CharField(max_length=64)
@@ -20,23 +19,23 @@ class NetworkReport(models.Model):
     ip_service_address = models.CharField(max_length=64, null=True)
 
     class Meta:
-        unique_together = ("sp_id", "serial_number", "activated")
+        unique_together = ("sp_id", "serial_number", "activated", "profile_id")
 
     def save(self, *args, **kwargs):
         if NetworkReport.objects.filter(
             sp_id = self.sp_id,
             serial_number = self.serial_number,
-            activated = self.activated
+            activated = self.activated,
+            profile_id = self.profile_id
         ).exists():
             raise ValidationError("Duplicate entry found for sp_id, serial_number, activated.")
 
-        # activated 필드가 비어있을 경우 기본값 설정
-        # if not self.activated:
-        #     self.activated = timezone.datetime(2000, 1, 1)
         if not self.activated:
-            self.activated = "2000-01-01 00:00:00.000"
+            self.activated = datetime(2000, 1, 1, 0, 0, 0, tzinfo=timezone.utc)
 
         super().save(*args, **kwargs)
+    def __str__(self):
+        return f"{self.sp_id} - {self.serial_number} - {self.activated}"
 
 
 class UploadedNRFile(models.Model):
