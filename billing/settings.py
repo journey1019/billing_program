@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'rest_framework', # Django REST framework
     'django_filters',
 
+    'main',
     'billing',
     'table.apps.TableConfig',
     'polls.apps.PollsConfig',
@@ -106,9 +107,19 @@ DATABASES = {
         'PASSWORD': '9312',
         'HOST': 'localhost',
         'PORT': '5432',
+    #     # 'ENGINE': 'django.db.backends.sqlite3',
+    #     # 'NAME': BASE_DIR / 'db.sqlite3',
+    }
+    # 'default': {
+        # 'ENGINE': 'django.db.backends.postgresql',
+        # 'NAME': 'billing', # billing_db / polls_db
+        # 'USER': 'orbcomm',
+        # 'PASSWORD': '@gccko2512',
+        # 'HOST': '112.168.252.12',
+        # 'PORT': '29432',
         # 'ENGINE': 'django.db.backends.sqlite3',
         # 'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    # }
 }
 
 
@@ -136,11 +147,11 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'Asia/Seoul' # UTC / KST(한국 표준시) Asia/Seoul
+TIME_ZONE = 'UTC' # UTC / KST(한국 표준시) Asia/Seoul
 
 USE_I18N = True
 # 시간대 변환 없이 로컬 시간대 그대로 저장됨
-USE_TZ = False # 타임존을 사용하도록 설정
+USE_TZ = True # 타임존을 사용하도록 설정
 
 
 # Static files (CSS, JavaScript, Images)
@@ -150,6 +161,8 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 

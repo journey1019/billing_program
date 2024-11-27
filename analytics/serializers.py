@@ -5,6 +5,8 @@ from account.models import Account
 from pplan.models import Pplan
 
 class CdrDeviceDataSerializer(serializers.ModelSerializer):
+    # acct_num = serializers.SerializerMethodField()
+    # ppid = serializers.SerializerMethodField()
     acct_num = serializers.SerializerMethodField()
     acct_name = serializers.SerializerMethodField()
     ppid = serializers.SerializerMethodField()
@@ -17,6 +19,7 @@ class CdrDeviceDataSerializer(serializers.ModelSerializer):
     remarks = serializers.SerializerMethodField()
     note = serializers.SerializerMethodField()
 
+
     class Meta:
         model = CDR
         fields = [
@@ -27,6 +30,12 @@ class CdrDeviceDataSerializer(serializers.ModelSerializer):
             'basic_fee', 'subscription_fee', 'free_byte', 'surcharge_unit',
             'each_surcharge_fee', 'apply_company', 'remarks', 'note'
         ]
+        # fields = [
+        #     'id', 'record_type', 'record_id', 'date_stamp', 'transaction_type',
+        #     'discount_code', 'd_product', 'msg_id', 'volume_unit_type', 'volume_units',
+        #     'access_id', 'profile_id', 'serial_number', 'region', 'amount', 'date_only',
+        #     'date_index', 'acct_num', 'ppid'
+        # ]
 
     def get_acct_num(self, obj):
         # CDR의 serial_number와 매칭되는 Device의 acct_num을 가져옴

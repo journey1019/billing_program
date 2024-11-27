@@ -1,6 +1,14 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
+<h2>Device 파일 업로드</h2>
+<form method="post" enctype="multipart/form-data" action="{% url 'device:device_upload' %}">
+    {% csrf_token %}
+    <label for="csv_file">CSV 파일 선택:</label>
+    <input type="file" id="csv_file" name="csv_file" accept=".csv" required>
+    <button type="submit">업로드</button>
+</form>
+
 <h2>계정 목록</h2>
 <a href="{% url 'device:device_create' %}">새 계정 생성</a>
 

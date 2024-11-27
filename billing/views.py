@@ -1,4 +1,4 @@
-# billing/views.py
+from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -17,7 +17,6 @@ from device.serializers import DeviceSerializer
 from pplan.serializers import PplanSerializer
 from account.serializers import AccountSerializer
 from django.views.decorators.csrf import csrf_exempt
-
 
 class AggregatedDataAPIView(APIView):
     def get(self, request, *args, **kwargs):

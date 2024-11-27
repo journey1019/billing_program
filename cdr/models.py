@@ -1,7 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
-from datetime import datetime
+from datetime import datetime, datetime_CAPI
 import pytz
 
 class CDR(models.Model):
@@ -27,7 +27,7 @@ class CDR(models.Model):
 
     class Meta:
         # Unique constraint to avoid duplicates
-        unique_together = ("serial_number", "date_stamp", "d_product", "msg_id")
+        unique_together = ("serial_number", "date_stamp", "d_product", "msg_id", "record_id")
 
     def save(self, *args, **kwargs):
         # Check for duplicates based on constraints
@@ -35,14 +35,18 @@ class CDR(models.Model):
             serial_number = self.serial_number,
             date_stamp = self.date_stamp,
             d_product = self.d_product,
-            msg_id = self.msg_id
+            msg_id = self.msg_id,
+            record_id = self.record_id
         ).exists():
-            raise ValidationError("Duplicate entry found for serial_number, date_stamp, d_product, and msg_id.")
+            raise ValidationError("Duplicate entry found for serial_number, date_stamp, d_product, msg_id, record_id.")
 
         # Convert date_stamp to datetime if it's a string
         if isinstance(self.date_stamp, str):
             self.date_stamp = datetime.strptime(self.date_stamp, "%Y-%m-%d %H:%M:%S")
 
+        self.date_stamp = self.date_stamp.replace(microsecond=0)
+
+        #print(f"{self.date_stamp} {self.serial_number}")
         # Convert datetime to Asia/Seoul time zone
         # self.date_stamp = pytz.timezone('Asia/Seoul').localize(self.date_stamp)
 

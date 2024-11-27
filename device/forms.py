@@ -18,3 +18,7 @@ class DeviceForm(forms.ModelForm):
             'alias': forms.TextInput(attrs={'placeholder': '고객 별명'}),
             'remarks': forms.TextInput(attrs={'placeholder': '비고'}),
         }
+
+
+class DeviceUploadForm(forms.Form):
+    csv_file = forms.FileField()

@@ -1,0 +1,12 @@
+<!-- device/templates/device/device_upload.html -->
+
+{% extends "base_generic.html" %}
+
+{% block content %}
+<h2>Device 파일 업로드</h2>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">업로드</button>
+</form>
+{% endblock %}

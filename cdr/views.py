@@ -33,34 +33,42 @@ def CDRUploadCSV(request):
             for row in transformed_data:
                 row["serial_number"] = row.pop("mobile_id", None)  # mobile_id -> serial_number
 
-                # datestamp를 그대로 문자열로 사용 (형식: "2024-08-01 00:00:00")
+                # Process date_stamp and remove microseconds
                 datestamp = row["datestamp"]
-                date_stamp = row["datestamp"]
-                date_only = datestamp.split()[0]  # "YYYY-MM-DD"
-                date_index = datestamp.replace("-", "")[:6]  # "YYYYMM"
+                date_stamp = datetime.strptime(datestamp, "%Y-%m-%d %H:%M:%S")  # Convert to datetime object
+                date_stamp = date_stamp.replace(microsecond=0)  # Strip microseconds
+
+                date_only = date_stamp.date()  # Extract date part (YYYY-MM-DD)
+                date_index = date_stamp.strftime("%Y%m")  # Extract YYYYMM format
+                # datestamp를 그대로 문자열로 사용 (형식: "2024-08-01 00:00:00")
+                # datestamp = row["datestamp"]
+                # date_stamp = row["datestamp"]
+                # date_only = datestamp.split()[0]  # "YYYY-MM-DD"
+                # date_index = datestamp.replace("-", "")[:6]  # "YYYYMM"
 
                 # 중복 여부 체크 (unique_together 필드를 기준으로)
                 existing_cdr = CDR.objects.filter(
                     serial_number=row["serial_number"],
                     date_stamp=date_stamp,
                     d_product=row["d_product"],
-                    msg_id=row["msg_id"]
+                    msg_id=row["msg_id"],
+                    record_id=row["record_id"],
                 ).first()
 
                 if existing_cdr:
                     # 중복된 값이 있으면 터미널에 출력
-                    print(f"중복된 값 발견: serial_number={row['serial_number']}, msg_id={row['msg_id']}, date_stamp={date_stamp}, d_product={row['d_product']}")
+                    print(f"중복된 값 발견: serial_number={row['serial_number']}, msg_id={row['msg_id']}, date_stamp={date_stamp}, d_product={row['d_product']}, record_id={row['record_id']}")
                 else:
                     # 중복된 값이 없다면 데이터를 저장
                     try:
                         CDR.objects.update_or_create(
                             serial_number=row["serial_number"],
                             msg_id=row["msg_id"],
+                            record_id=row["record_id"],
                             d_product=row["d_product"],
                             date_stamp=date_stamp,  # 문자열 그대로 저장
                             defaults={
                                 "record_type": row.get("record_type"),
-                                "record_id": row.get("record_id"),
                                 "transaction_type": row.get("transaction_type"),
                                 "discount_code": row.get("discount_code"),
                                 "volume_unit_type": row.get("volume_unit_type"),
@@ -75,7 +83,7 @@ def CDRUploadCSV(request):
                         )
                     except IntegrityError:
                         # 중복된 값 발견 시 예외 처리
-                        print(f"중복된 값 발견 (예외 처리): serial_number={row['serial_number']}, msg_id={row['msg_id']}, date_stamp={date_stamp}, d_product={row['d_product']}")
+                        print(f"중복된 값 발견 (예외 처리): serial_number={row['serial_number']}, msg_id={row['msg_id']}, date_stamp={date_stamp}, d_product={row['d_product']}, record_id={row['record_id']}")
 
             # 업로드된 파일을 기록
             uploaded_file = UploadedFile(file_name=csv_file.name, file=csv_file)
