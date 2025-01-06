@@ -16,24 +16,6 @@ from django.core.management import call_command
 
 # CDR.csv Upload
 def CDRUploadCSV(request):
-    # Check if the CDR table exists in the database
-    # with connection.cursor() as cursor:
-    #     cursor.execute("""
-    #         SELECT EXISTS (
-    #             SELECT 1
-    #             FROM information_schema.tables
-    #             WHERE table_name = 'cdr'
-    #         )
-    #     """)
-    #     table_exists = cursor.fetchone()[0]
-    #
-    # # If the table does not exist, run migrations to create it
-    # if not table_exists:
-    #     call_command("makemigrations", "cdr")  # Generate migration files
-    #     call_command("migrate", "cdr")        # Apply migrations
-    #     messages.success(request, "CDR 테이블이 생성되었습니다. CSV 파일을 업로드하세요.")
-    #     return redirect("cdr:upload_csv")
-
     if request.method == "POST":
         csv_files = request.FILES.getlist("csv_file")  # 여러 파일을 가져옴
         for csv_file in csv_files:
@@ -60,11 +42,6 @@ def CDRUploadCSV(request):
 
                 date_only = date_stamp.date()  # Extract date part (YYYY-MM-DD)
                 date_index = date_stamp.strftime("%Y%m")  # Extract YYYYMM format
-                # datestamp를 그대로 문자열로 사용 (형식: "2024-08-01 00:00:00")
-                # datestamp = row["datestamp"]
-                # date_stamp = row["datestamp"]
-                # date_only = datestamp.split()[0]  # "YYYY-MM-DD"
-                # date_index = datestamp.replace("-", "")[:6]  # "YYYYMM"
 
                 # 중복 여부 체크 (unique_together 필드를 기준으로)
                 existing_cdr = CDR.objects.filter(

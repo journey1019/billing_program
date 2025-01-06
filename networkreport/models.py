@@ -31,7 +31,7 @@ class NetworkReport(models.Model):
             raise ValidationError("Duplicate entry found for sp_id, serial_number, activated.")
 
         if not self.activated:
-            self.activated = datetime(2000, 1, 1, 0, 0, 0, tzinfo=timezone.utc)
+            self.activated = datetime(2000, 1, 1, 0, 0, 0, tzinfo=pytz.timezone("Asia/Seoul"))
 
         super().save(*args, **kwargs)
     def __str__(self):

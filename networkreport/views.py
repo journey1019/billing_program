@@ -12,6 +12,7 @@ from rest_framework.pagination import PageNumberPagination
 from .serializers import NetworkReportSerializer
 # from django.utils import timezone
 from datetime import datetime, timezone
+import pytz
 
 def NetworkReportUploadCSV(request):
     if request.method == "POST":
@@ -28,18 +29,20 @@ def NetworkReportUploadCSV(request):
                 {k.lower(): v for k, v in row.items()} for row in csv_reader  # 컬럼명을 소문자로 변환
             ]
 
+            kst_timezone = pytz.timezone("Asia/Seoul")
+
             for row in transformed_data:
                 row["ip_service_address"] = row.pop("IP_SERVICE_ADDRESS", None)
 
                 # activated 필드 값 처리
                 activated_value = row.get("activated")
                 if not activated_value or activated_value.upper() == "NULL":
-                    activated_dt = datetime(2000, 1, 1, 0, 0, 0, tzinfo=timezone.utc)
+                    activated_dt = datetime(2000, 1, 1, 0, 0, 0, tzinfo=kst_timezone)
                 else:
                     try:
                         activated_dt = datetime.strptime(activated_value, "%Y-%m-%d %H:%M:%S")
                         if activated_dt.tzinfo is None:
-                            activated_dt = activated_dt.replace(tzinfo=timezone.utc)
+                            activated_dt = kst_timezone.localize(activated_dt)
                     except ValueError:
                         print(f"잘못된 날짜 형식: {activated_value}")
                         messages.warning(request, f"잘못된 날짜 형식: {activated_value}")
